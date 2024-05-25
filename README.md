@@ -1,4 +1,4 @@
-# Group 24 - {project title TBD}
+# Group 24 - Therapy Connections
 
 ## App description
 
