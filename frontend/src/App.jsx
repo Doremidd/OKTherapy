@@ -13,7 +13,7 @@ function App() {
       <TherapistList></TherapistList>
       <UserProfile></UserProfile>
     </>
-  )
+  );
 }
 
 export default App
