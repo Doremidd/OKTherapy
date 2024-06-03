@@ -1,6 +1,14 @@
 import { useLocation } from "react-router-dom";
 import "./style.css";
-import { Button, Avatar } from "@chakra-ui/react";
+import {
+  Button,
+  Avatar,
+  Link,
+  MenuButton,
+  Menu,
+  MenuList,
+  MenuItem,
+} from "@chakra-ui/react";
 
 const NavBar = () => {
   let location = useLocation();
@@ -11,9 +19,23 @@ const NavBar = () => {
     >
       <img src="/assets/OKTherapy.png" alt="Logo" style={{ height: 20 }} />
       {location.pathname == "/" ? (
-        <Button colorScheme="brand">Login</Button>
+        <Link href="/form">
+          <Button colorScheme="brand">Login</Button>
+        </Link>
       ) : (
-        <Avatar size="sm"></Avatar>
+        <Menu>
+          <MenuButton>
+            <Avatar size="sm"></Avatar>
+          </MenuButton>
+          <MenuList>
+            <Link href="/profile">
+              <MenuItem>Profile</MenuItem>
+            </Link>
+            <Link href="/">
+              <MenuItem>Log out</MenuItem>
+            </Link>
+          </MenuList>
+        </Menu>
       )}
     </div>
   );
