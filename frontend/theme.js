@@ -28,6 +28,9 @@ const theme = extendTheme({
     },
     components: {
         Button: {
+            baseStyle: {
+                fontWeight: "medium",
+              },
             variants: {
                 solid: {
                     bg: "brand.500",
