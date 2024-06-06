@@ -1,0 +1,51 @@
+.alignLeft {
+    text-align: left;
+}
+
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 36px;
+}
+
+.accordion {
+    background-color: #f0ecf7;
+    padding: 24px;
+    border-radius: 10px;
+}
+
+.accordionContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.avatarTextContainer {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.accordionPanel {
+    text-align: left;
+    background-color: #FDFAFA;
+    padding: 24px;
+    margin-top: 16px;
+    border-radius: 10px;
+}
+
+.accordionPanelText {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.leftButton {
+    margin-right: 8px;
+}
+
+.rightButton {
+    margin-right: 8px;
+    margin-left: 8px;
+}
