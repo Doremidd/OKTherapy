@@ -17,11 +17,11 @@ export default function Body({isEditing}) {
   const [value, setValue] = React.useState('1')
   return (
     <div>
-      <Box width='1152px' height='800px' mt='476px' ml='146px' pb = '-300px'>
+      <Box position = 'relative' width='80%'  justifyContent="center" height='800px' mt='476px' ml='10%' mr ='10%'>
         <VStack spacing='40px'>
 
-          <HStack as='section' spacing='350px' mt = '-400px'>
-            <Box as='section' ml = '-70px'>
+          <HStack as='section' spacing='350px' mt = '-400px' ml = '0px'>
+            <Box as='section' ml = '-1rem'>
               <HStack spacing='10px'>
                 <Text fontWeight='400' fontSize='17px' color='#000000'>
                   Age
@@ -52,7 +52,7 @@ export default function Body({isEditing}) {
           </HStack>
 
           <HStack as='section' spacing='250px'>
-            <Box as='section' ml = '-30px'>
+            <Box as='section' ml = '1rem'>
               <HStack spacing='10px'>
                 <Text fontWeight='400' fontSize='17px' color='#000000'>
                   Sexuality
@@ -86,8 +86,8 @@ export default function Body({isEditing}) {
             </Box>
           </HStack>
 
-          <HStack as='section' spacing='230px'>
-            <Box as='section' ml = '28px'>
+          <HStack as='section' spacing='250px'>
+            <Box as='section' ml = '1rem'>
               <HStack spacing='10px'>
                 <Text fontWeight='400' fontSize='17px' color='#000000'>
                   Religious beliefs
@@ -109,7 +109,7 @@ export default function Body({isEditing}) {
                 <Text fontWeight='400' fontSize='17px' color='#000000'>
                   Preferred Language
                 </Text>
-                <Select placeholder='English' width='250px' disabled = {!isEditing}>
+                <Select placeholder='English' width='200px' disabled = {!isEditing}>
                   <option value='Chinese'>Chinese</option>
                   <option value='French'>French</option>
                 </Select>
@@ -119,8 +119,8 @@ export default function Body({isEditing}) {
 
 
 
-          <HStack as='section' spacing='350px'>
-            <Box as='section' ml = '-170px'>
+          <HStack as='section' spacing='360px'>
+          <Box as='section' ml = '-150px'>
               <HStack spacing='10px'>
                 <Text fontWeight='400' fontSize='17px' color='#000000'>
                   Min Buldget
@@ -135,8 +135,8 @@ export default function Body({isEditing}) {
               </HStack>
             </Box>
 
-            <Box as='section' ml = '10px'>
-              <HStack spacing='10px' ml = '-50px'>
+            <Box as='section'>
+              <HStack spacing='10px' ml = '-2rem'>
                 <Text fontWeight='400' fontSize='17px' color='#000000'>
                   Max Buldget
                 </Text>
@@ -195,10 +195,6 @@ export default function Body({isEditing}) {
               <Input placeholder='Other' wdith='1000px' disabled = {!isEditing}/> 
             </Stack>
           </Box>
-
-
-
-
         </VStack>
       </Box>
     </div>
