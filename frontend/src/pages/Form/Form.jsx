@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Box, FormControl, FormLabel, Input, Textarea, Select, Button, RadioGroup, Radio, Stack, Progress } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Box, FormControl, FormLabel, Input, Select, Button, RadioGroup, Radio, Stack, Progress } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 const TherapyForm = () => {
   const [step, setStep] = useState(0);
@@ -15,6 +16,7 @@ const TherapyForm = () => {
     religiousBeliefs: '',
     noTimesPerWeek: '',
   });
+  const navigate = useNavigate();
 
   const steps = [
     {
@@ -206,6 +208,7 @@ const TherapyForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+    navigate('/matches');
   };
 
   return (
