@@ -4,6 +4,7 @@ const FeatureStep = ({ number, title, description }) => {
     return (
         <Box
             width={{ base: "100%", md: "85%" }}
+            height="260px"
             padding="20px"
             bg="#D5CFE1"
             borderRadius="10px"
