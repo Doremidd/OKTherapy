@@ -5,7 +5,6 @@ import Landing from './pages/Landing/Landing'
 import TherapistList from './pages/TherapistList/TherapistList'
 import UserProfile from './pages/UserProfile/UserProfile'
 import Form from './pages/Form/Form'
-import Footer from './components/Footer'
 
 function App() {
   return (
@@ -17,7 +16,6 @@ function App() {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/matches" element={<TherapistList />} />
       </Routes>
-      <Footer />
     </Router>
   )
 }
