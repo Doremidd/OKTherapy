@@ -28,7 +28,6 @@ const FeatureStep = ({ number, title, description }) => {
             </Box>
             <Text
                 marginTop="40px"
-                fontFamily="'Red Hat Display'"
                 fontStyle="normal"
                 fontWeight="600"
                 fontSize="24px"

@@ -21,7 +21,6 @@ const Features = () => {
                     height="57px"
                     margin="0 auto"
                     marginTop="50px"
-                    fontFamily="'Red Hat Display'"
                     fontStyle="normal"
                     fontWeight="500"
                     fontSize="36px"

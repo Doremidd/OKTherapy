@@ -27,7 +27,6 @@ const Hero = () => {
                         padding="0 20px"
                     >
                         <Text
-                            fontFamily="'Red Hat Display'"
                             fontStyle="normal"
                             fontWeight="600"
                             fontSize="48px"
@@ -38,7 +37,6 @@ const Hero = () => {
                         </Text>
                         <Text
                             marginTop="20px"
-                            fontFamily="'Red Hat Text'"
                             fontStyle="normal"
                             fontWeight="400"
                             fontSize="24px"
@@ -52,7 +50,6 @@ const Hero = () => {
                             bg="#69877D"
                             borderRadius="6.75px"
                             color="#FFFFFF"
-                            fontFamily="'Inter'"
                             fontWeight="600"
                             fontSize="18px"
                             lineHeight="28px"
