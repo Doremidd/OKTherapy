@@ -224,16 +224,13 @@ const TherapyForm = () => {
       component: (
         <FormControl id="location" isRequired>
           <FormLabel>Where are you located?</FormLabel>
-          <Select
-            placeholder="Select location"
+          <Input
+            placeholder="Type your preferred location"
             value={formData.location}
             onChange={(e) =>
               setFormData({ ...formData, location: e.target.value })
             }
-          >
-            <option value="in-bc">In B.C</option>
-            <option value="outside-bc">Outside B.C</option>
-          </Select>
+          />
         </FormControl>
       ),
     },
