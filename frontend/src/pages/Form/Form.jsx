@@ -28,8 +28,14 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
+import { useDispatch, useSelector } from "react-redux";
+import { addTherapistMatches, createProfile } from "../../redux/reducer";
 
 const TherapyForm = () => {
+  const dispatch = useDispatch();
+  const allTherapists = useSelector((state) => {
+    return state?.userReducer?.allTherapists;
+  });
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     age: "",
@@ -334,6 +340,11 @@ const TherapyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(createProfile(formData));
+    // placeholder: randomly choosing 3 therapists from list of therapists to match
+    const shuffledTherapists = [...allTherapists].sort(() => 0.5 - Math.random());
+    const selectedTherapists = shuffledTherapists.slice(0, 3);
+    dispatch(addTherapistMatches(selectedTherapists));
     console.log("Form submitted:", formData);
     navigate("/matches");
   };
