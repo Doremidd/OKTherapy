@@ -6,7 +6,7 @@ import { Box} from '@chakra-ui/react'
 export default function Footer({onCancel,onSave}) {
   return (
 	<div>
-    <Box ml = '300px' mb = '200px' mt = '-100px'>
+    <Box ml = '300px' mb = '50px' mt = '50px'>
     <HStack spacing = '40px'>
     <Button colorScheme='teal' variant='outline' onClick={onCancel}>Cancel</Button>
     <Button colorScheme='teal' onClick = {onSave}>Save</Button>  
