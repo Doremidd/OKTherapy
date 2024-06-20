@@ -3,6 +3,6 @@ import userReducer from "/src/redux/reducer";
 
 export default configureStore({
   reducer: {
-    userReducer: userReducer,
+    user: userReducer,
   },
 });
