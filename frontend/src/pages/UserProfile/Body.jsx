@@ -18,7 +18,7 @@ import {
   religiousBeliefs,
   languages,
   therapyFocus,
-  therapyModes,
+  therapyModes
 } from "../Form/FormOption";
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from "react";
@@ -62,7 +62,7 @@ export default function Body({ isEditing }) {
                   size="sm"
                   maxW={24}
                   value={age}
-                  onChange = {(e) => setAge(e.target.value)}
+                  onChange = {(valueString) => setAge(parse(valueString))}
                   min={0}
                   max={100}
                   disabled={!isEditing}
@@ -185,7 +185,8 @@ export default function Body({ isEditing }) {
                   size="sm"
                   step={5}
                   maxW={24}
-                  value={min} onChange = {(e) => setMin(e.target.value)}
+                  value={min} 
+                  onChange = {(valueString) => setMin(parse(valueString))}
                   min={100}
                   max={300}
                   disabled={!isEditing}
@@ -208,7 +209,8 @@ export default function Body({ isEditing }) {
                   size="sm"
                   step={5}
                   maxW={24}
-                  value={max} onChange = {(e) => setMax(e.target.value)}
+                  value={max} 
+                  onChange = {(valueString) => setMax(parse(valueString))}
                   min={100}
                   max={300}
                   disabled={!isEditing}
@@ -243,9 +245,9 @@ export default function Body({ isEditing }) {
               </Text>
               <Select value={therapyMode} onChange = {(e) => setTherapyMode(e.target.value)} width="200px" disabled={!isEditing}>
                 {therapyModes.map((mode, index) => (
-                  <Radio key={index} value={mode}>
+                  <option key={index} value={mode}>
                     {mode}
-                  </Radio>
+                  </option>
                 ))}
               </Select>
             </HStack>

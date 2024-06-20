@@ -5,24 +5,24 @@ import { updateProfile } from '../../redux/reducer';
 import { Box, Text, useDisclosure } from "@chakra-ui/react";
 import { Stack, HStack, VStack } from "@chakra-ui/react";
 import {
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  Radio,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
+    Radio,
 } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import { Checkbox } from "@chakra-ui/react";
 import {
-  genders,
-  sexualities,
-  relationshipStatuses,
-  religiousBeliefs,
-  languages,
-  therapyFocus,
-  therapyModes,
+    genders,
+    sexualities,
+    relationshipStatuses,
+    religiousBeliefs,
+    languages,
+    therapyFocus,
+    therapyModes,
 } from "../Form/FormOption";
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -66,8 +66,15 @@ const UserProfile = () => {
 
     const handleSave = () => {
         setIsEditing(false)
-        dispatch(updateProfile({ age,gender,sexuality,relationship,religious,therapyMode, min,max,location,language,therapyFocus }));
+        dispatch(updateProfile({ age, gender, sexuality, relationship, religious, therapyMode, min, max, location, language, therapyFocus }));
     }
+
+    const handleCheckboxChange = (index) => {
+        const updatedFocus = therapyFocus.map((focus, i) =>
+            i === index ? !focus : focus
+        );
+        setTherapyFocus(updatedFocus);
+    };
 
 
 
@@ -94,7 +101,7 @@ const UserProfile = () => {
                                         size="sm"
                                         maxW={24}
                                         value={age}
-                                        onChange={(e) => setAge(e.target.value)}
+                                        onChange={(valueString) => setAge(parseInt(valueString))}
                                         min={0}
                                         max={100}
                                         disabled={!isEditing}
@@ -217,7 +224,8 @@ const UserProfile = () => {
                                         size="sm"
                                         step={5}
                                         maxW={24}
-                                        value={min} onChange={(e) => setMin(e.target.value)}
+                                        value={min}
+                                        onChange={(valueString) => setMin(parseInt(valueString))}
                                         min={100}
                                         max={300}
                                         disabled={!isEditing}
@@ -240,7 +248,8 @@ const UserProfile = () => {
                                         size="sm"
                                         step={5}
                                         maxW={24}
-                                        value={max} onChange={(e) => setMax(e.target.value)}
+                                        value = {max}
+                                        onChange={(valueString) => setMax(parseInt(valueString))}
                                         min={100}
                                         max={300}
                                         disabled={!isEditing}
@@ -275,9 +284,9 @@ const UserProfile = () => {
                                 </Text>
                                 <Select value={therapyMode} onChange={(e) => setTherapyMode(e.target.value)} width="200px" disabled={!isEditing}>
                                     {therapyModes.map((mode, index) => (
-                                        <Radio key={index} value={mode}>
+                                        <option key={index} value={mode}>
                                             {mode}
-                                        </Radio>
+                                        </option>
                                     ))}
                                 </Select>
                             </HStack>
@@ -290,7 +299,7 @@ const UserProfile = () => {
 
                             <Stack direction="column" spacing="10px" mt="10px" ml="350px">
                                 {therapyFocus.map((focus, index) => (
-                                    <Checkbox key={index} isChecked={therapyFocus[index]} onChange={(e) => setTherapyFocus(e.target.value)[index]}
+                                    <Checkbox key={index} isChecked={focus} onChange={() => handleCheckboxChange(index)}
                                         disabled={!isEditing}>{focus}</Checkbox>
                                 ))}
                                 <Input placeholder="Other" width="400px" disabled={!isEditing} />
