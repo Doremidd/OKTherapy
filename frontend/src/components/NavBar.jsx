@@ -1,5 +1,7 @@
 import { useLocation } from "react-router-dom";
 import "./style.css";
+import LoginButton from "./LoginButton";
+import LogoutButton from "./LogoutButton";
 import {
   Button,
   Avatar,
@@ -21,6 +23,8 @@ const NavBar = () => {
       {location.pathname == "/" ? (
         <Link href="/form">
           <Button colorScheme="brand">Login</Button>
+          <LoginButton />
+          <LogoutButton />
         </Link>
       ) : (
         <Menu>
