@@ -15,7 +15,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <ChakraProvider theme={theme}>
-        <Auth0Provider domain={domain} clientId={clientId}>
+        <Auth0Provider
+          domain={domain}
+          clientId={clientId}
+          authorizationParams={{
+            redirect_uri: window.location.origin,
+          }}
+        >
           <App />
         </Auth0Provider>
       </ChakraProvider>
