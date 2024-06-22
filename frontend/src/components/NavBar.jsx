@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import "./style.css";
+import LoginButton from "./LoginButton";
 import {
-  Button,
   Avatar,
   Link,
   MenuButton,
@@ -9,9 +9,11 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const NavBar = () => {
   let location = useLocation();
+  const { logout } = useAuth0();
   return (
     <div
       className="navbar"
@@ -19,9 +21,7 @@ const NavBar = () => {
     >
       <img src="/assets/OKTherapy.png" alt="Logo" style={{ height: 20 }} />
       {location.pathname == "/" ? (
-        <Link href="/form">
-          <Button colorScheme="brand">Login</Button>
-        </Link>
+        <LoginButton />
       ) : (
         <Menu>
           <MenuButton>
@@ -31,9 +31,7 @@ const NavBar = () => {
             <Link href="/profile">
               <MenuItem>Profile</MenuItem>
             </Link>
-            <Link href="/">
-              <MenuItem>Log out</MenuItem>
-            </Link>
+            <MenuItem onClick={() => logout()}>Log out</MenuItem>
           </MenuList>
         </Menu>
       )}
