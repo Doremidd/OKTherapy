@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useDisclosure } from "@chakra-ui/react";
 import { Stack, HStack, VStack } from "@chakra-ui/react";
 import {
   NumberInput,
@@ -18,11 +18,29 @@ import {
   religiousBeliefs,
   languages,
   therapyFocus,
-  therapyModes,
+  therapyModes
 } from "../Form/FormOption";
+import { useSelector, useDispatch } from 'react-redux';
+import { useState } from "react";
+
 
 // eslint-disable-next-line react/prop-types
 export default function Body({ isEditing }) {
+  const value = useSelector(state => state.user.value);
+  const [age,setAge] = useState(value.age);
+  const [gender,setGender] = useState(value.gender);
+  const [sexuality,setSexuality] = useState(value.sexuality);
+  const [relationship,setRelationship] = useState(value.relationshipStatus);
+  const [religous,setReglious] = useState(value.religiousBeliefs);
+  const [min,setMin] = useState(value.minbudget);
+  const [max,setMax] = useState(value.maxbudget);
+  const [location,setLocation] = useState(value.location);
+  const [language,setLanguage] = useState(value.language);
+  const [therapyMode,setTherapyMode] = useState(value.therapyMode);
+  const [therapyFocus,setTherapyFocus] = useState(value.therapyFocus);
+
+  const dispatch = useDispatch();
+
   return (
     <div>
       <Box
@@ -43,7 +61,8 @@ export default function Body({ isEditing }) {
                 <NumberInput
                   size="sm"
                   maxW={24}
-                  defaultValue={23}
+                  value={age}
+                  onChange = {(valueString) => setAge(parse(valueString))}
                   min={0}
                   max={100}
                   disabled={!isEditing}
@@ -62,7 +81,7 @@ export default function Body({ isEditing }) {
                 <Text fontWeight="400" fontSize="17px" color="#000000">
                   Gender
                 </Text>
-                <Select placeholder="Male" width="250px" disabled={!isEditing}>
+                <Select value={gender} onChange = {(e) => setGender(e.target.value)} width="250px" disabled={!isEditing}>
                   {genders.map((gender, index) => (
                     <option key={index} value={gender}>
                       {gender}
@@ -81,7 +100,7 @@ export default function Body({ isEditing }) {
                   Sexuality
                 </Text>
                 <Select
-                  placeholder="Asexual"
+                  value={sexuality} onChange = {(e) => setSexuality(e.target.value)}
                   width="250px"
                   disabled={!isEditing}
                 >
@@ -101,7 +120,7 @@ export default function Body({ isEditing }) {
                   Relationship Status
                 </Text>
                 <Select
-                  placeholder="Single"
+                  value={relationship} onChange = {(e) => setRelationship(e.target.value)}
                   width="200px"
                   disabled={!isEditing}
                 >
@@ -122,7 +141,7 @@ export default function Body({ isEditing }) {
                   Religious beliefs
                 </Text>
                 <Select
-                  placeholder="Christian"
+                 value={religous} onChange = {(e) => setReglious(e.target.value)}
                   width="250px"
                   disabled={!isEditing}
                 >
@@ -142,7 +161,7 @@ export default function Body({ isEditing }) {
                   Preferred Language
                 </Text>
                 <Select
-                  placeholder="English"
+                  value={language} onChange = {(e) => setLanguage(e.target.value)}
                   width="200px"
                   disabled={!isEditing}
                 >
@@ -166,7 +185,8 @@ export default function Body({ isEditing }) {
                   size="sm"
                   step={5}
                   maxW={24}
-                  defaultValue={100}
+                  value={min} 
+                  onChange = {(valueString) => setMin(parse(valueString))}
                   min={100}
                   max={300}
                   disabled={!isEditing}
@@ -189,7 +209,8 @@ export default function Body({ isEditing }) {
                   size="sm"
                   step={5}
                   maxW={24}
-                  defaultValue={100}
+                  value={max} 
+                  onChange = {(valueString) => setMax(parse(valueString))}
                   min={100}
                   max={300}
                   disabled={!isEditing}
@@ -210,7 +231,7 @@ export default function Body({ isEditing }) {
                 Location
               </Text>
               <Input
-                placeholder="Surrey, BC"
+                value={location} onChange = {(e) => setLocation(e.target.value)}
                 wdith="1000px"
                 disabled={!isEditing}
               />
@@ -222,11 +243,11 @@ export default function Body({ isEditing }) {
               <Text fontWeight="400" fontSize="17px" color="#000000">
                 Preferred Therapy Mode
               </Text>
-              <Select placeholder="Online" width="200px" disabled={!isEditing}>
+              <Select value={therapyMode} onChange = {(e) => setTherapyMode(e.target.value)} width="200px" disabled={!isEditing}>
                 {therapyModes.map((mode, index) => (
-                  <Radio key={index} value={mode}>
+                  <option key={index} value={mode}>
                     {mode}
-                  </Radio>
+                  </option>
                 ))}
               </Select>
             </HStack>
@@ -239,13 +260,16 @@ export default function Body({ isEditing }) {
 
             <Stack direction="column" spacing="10px" mt="10px" ml="350px">
             {therapyFocus.map((focus, index) => (
-                 <Checkbox key={index} disabled={!isEditing}>{focus}</Checkbox>
+                 <Checkbox key={index}  isChecked={therapyFocus[index]}  onChange = {(e) => setTherapyFocus(e.target.value)[index]}
+                 disabled={!isEditing}>{focus}</Checkbox>
               ))}
               <Input placeholder="Other" width="400px" disabled={!isEditing} />
             </Stack>
           </Box>
         </VStack>
       </Box>
+
+
     </div>
   );
 }
