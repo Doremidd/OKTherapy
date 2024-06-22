@@ -15,7 +15,7 @@ export const userSlice = createSlice({
       location: "Surrey, BC",
       language: "English",
       // noTimesPerWeek: "",
-      therapyFocus: [true, false, false,false,true,false,false,false,false],
+      therapyFocus: "Grief or Death",
     },
     allTherapists: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], // TO DO: replace items with scraped therapists
     matchedTherapists: [],

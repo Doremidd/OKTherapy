@@ -21,7 +21,7 @@ import {
     relationshipStatuses,
     religiousBeliefs,
     languages,
-    therapyFocus,
+    therapyFocus as therapyFocuses,
     therapyModes,
 } from "../Form/FormOption";
 import { useSelector, useDispatch } from 'react-redux';
@@ -298,8 +298,8 @@ const UserProfile = () => {
                             </Text>
 
                             <Stack direction="column" spacing="10px" mt="10px" ml="350px">
-                                {therapyFocus.map((focus, index) => (
-                                    <Checkbox key={index} isChecked={focus} onChange={() => handleCheckboxChange(index)}
+                                {therapyFocuses.map((focus, index) => (
+                                    <Checkbox key={index} isChecked={focus == therapyFocus} onChange={() => handleCheckboxChange(index)}
                                         disabled={!isEditing}>{focus}</Checkbox>
                                 ))}
                                 <Input placeholder="Other" width="400px" disabled={!isEditing} />

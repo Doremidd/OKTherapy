@@ -34,7 +34,7 @@ import { addTherapistMatches, createProfile } from "../../redux/reducer";
 const TherapyForm = () => {
   const dispatch = useDispatch();
   const allTherapists = useSelector((state) => {
-    return state?.userReducer?.allTherapists;
+    return state?.user?.allTherapists;
   });
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
@@ -320,10 +320,10 @@ const TherapyForm = () => {
         </FormControl>
       ),
     },
-    {
-      label: "Filler",
-      component: <></>,
-    },
+    // {
+    //   label: "Filler",
+    //   component: <></>,
+    // },
   ];
 
   const handleNext = () => {
