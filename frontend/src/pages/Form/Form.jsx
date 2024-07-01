@@ -10,24 +10,20 @@ import {
   Radio,
   Stack,
   Progress,
+  CheckboxGroup,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import BudgetSlider from "../../components/BudgetSlider";
 import {
+  certification,
   genders,
   sexualities,
-  relationshipStatuses,
-  religiousBeliefs,
-  languages,
-  therapyModes,
+  therapistGender,
   therapyFocus,
+  therapyMethods,
+  therapyModes,
 } from "./FormOption";
-import {
-  AutoComplete,
-  AutoCompleteInput,
-  AutoCompleteItem,
-  AutoCompleteList,
-} from "@choc-ui/chakra-autocomplete";
 import { useDispatch, useSelector } from "react-redux";
 import { addTherapistMatches, createProfile } from "../../redux/reducer";
 
@@ -41,14 +37,13 @@ const TherapyForm = () => {
     age: "",
     gender: "",
     sexuality: "",
-    relationshipStatus: "",
-    religiousBeliefs: "",
-    therapyMode: "",
-    budget: "",
     location: "",
-    language: "",
-    noTimesPerWeek: "",
-    therapyFocus: "",
+    budget: [],
+    therapyMode: "",
+    therapyFocus: [],
+    therapistGender: "",
+    therapyMethods: [],
+    certification: [],
   });
   const navigate = useNavigate();
 
@@ -56,12 +51,6 @@ const TherapyForm = () => {
     !genders.includes(formData.gender) && formData.gender !== "";
   const isOtherSexuality =
     !sexualities.includes(formData.sexuality) && formData.sexuality !== "";
-  const isOtherReligion =
-    !religiousBeliefs.includes(formData.religiousBeliefs) &&
-    formData.religiousBeliefs !== "";
-  const isOtherLanguage =
-    !languages.includes(formData.language) && formData.language !== "";
-
   const steps = [
     {
       label: "Age",
@@ -94,7 +83,7 @@ const TherapyForm = () => {
                 {gender}
               </option>
             ))}
-            <option value="other">Other</option>
+            <option value="other">No preference</option>
           </Select>
           {isOtherGender && (
             <Input
@@ -142,55 +131,26 @@ const TherapyForm = () => {
       ),
     },
     {
-      label: "Relationship Status",
+      label: "Location",
       component: (
-        <FormControl id="relationship-status" isRequired>
-          <FormLabel>Relationship Status</FormLabel>
-          <Select
-            placeholder="Select your relationship status"
-            value={formData.relationshipStatus}
+        <FormControl id="location" isRequired>
+          <FormLabel>Where are you located?</FormLabel>
+          <Input
+            placeholder="Type your preferred location"
+            value={formData.location}
             onChange={(e) =>
-              setFormData({ ...formData, relationshipStatus: e.target.value })
+              setFormData({ ...formData, location: e.target.value })
             }
-          >
-            {relationshipStatuses.map((status, index) => (
-              <option key={index} value={status}>
-                {status}
-              </option>
-            ))}
-          </Select>
+          />
         </FormControl>
       ),
     },
     {
-      label: "Religious Beliefs",
+      label: "Budget",
       component: (
-        <FormControl id="religiousBeliefs">
-          <FormLabel>What are your religious/spiritual beliefs?</FormLabel>
-          <Select
-            placeholder="Select your religious/spirituality"
-            value={formData.religiousBeliefs}
-            onChange={(e) =>
-              setFormData({ ...formData, religiousBeliefs: e.target.value })
-            }
-          >
-            {religiousBeliefs.map((religion, index) => (
-              <option key={index} value={religion}>
-                {religion}
-              </option>
-            ))}
-            <option value="Other">Other</option>
-          </Select>
-          {isOtherReligion && (
-            <Input
-              placeholder="Please specify"
-              defaultValue=""
-              onChange={(e) =>
-                setFormData({ ...formData, religiousBeliefs: e.target.value })
-              }
-              mt={2}
-            />
-          )}
+        <FormControl id="budget" isRequired>
+          <FormLabel>What’s your budget?</FormLabel>
+          <BudgetSlider formData={formData} setFormData={setFormData} />
         </FormControl>
       ),
     },
@@ -217,113 +177,117 @@ const TherapyForm = () => {
       ),
     },
     {
-      label: "Budget",
+      label: "Therapy focus",
       component: (
-        <FormControl id="budget" isRequired>
-          <FormLabel>What’s your budget?</FormLabel>
-          <BudgetSlider formData={formData} setFormData={setFormData} />
-        </FormControl>
-      ),
-    },
-    {
-      label: "Location",
-      component: (
-        <FormControl id="location" isRequired>
-          <FormLabel>Where are you located?</FormLabel>
-          <Input
-            placeholder="Type your preferred location"
-            value={formData.location}
-            onChange={(e) =>
-              setFormData({ ...formData, location: e.target.value })
-            }
-          />
-        </FormControl>
-      ),
-    },
-    {
-      label: "Language",
-      component: (
-        <FormControl id="language" isRequired>
-          <FormLabel>Preferred Language</FormLabel>
-          <Select
-            placeholder="Select language"
-            value={formData.language}
-            onChange={(e) =>
-              setFormData({ ...formData, language: e.target.value })
+        <FormControl id="therapyFocus" isRequired>
+          <FormLabel>What are you currently struggling with?</FormLabel>
+          <CheckboxGroup
+            value={formData.therapyFocus}
+            onChange={(values) =>
+              setFormData({ ...formData, therapyFocus: values })
             }
           >
-            {languages.map((language, index) => (
-              <option key={index} value={language}>
-                {language}
+            <Stack>
+              {therapyFocus.map((mode, index) => (
+                <Checkbox
+                  key={index}
+                  value={mode}
+                  style={{ textAlign: "left" }}
+                  isRequired={false}
+                >
+                  {mode}
+                </Checkbox>
+              ))}
+            </Stack>
+          </CheckboxGroup>
+        </FormControl>
+      ),
+    },
+    {
+      label: "Preferred Therapist Gender",
+      component: (
+        <FormControl id="therapistGender" isRequired>
+          <FormLabel>
+            Select your preference for your therapist&apos;s gender, if any.
+          </FormLabel>
+          <Select
+            placeholder="Select your preferred therapist gender."
+            value={formData.therapistGender}
+            onChange={(e) =>
+              setFormData({ ...formData, therapistGender: e.target.value })
+            }
+          >
+            {therapistGender.map((gender, index) => (
+              <option key={index} value={gender}>
+                {gender}
               </option>
             ))}
-            <option value="Other">Other</option>
           </Select>
-          {isOtherLanguage && (
-            <Input
-              placeholder="Please specify"
-              defaultValue=""
-              onChange={(e) =>
-                setFormData({ ...formData, language: e.target.value })
-              }
-              mt={2}
-            />
-          )}
         </FormControl>
       ),
     },
     {
-      label: "Current focus",
+      label: "Preferred Therapy Methods",
       component: (
-        <FormControl id="therapyFocus">
-          <FormLabel>What are you currently struggling with?</FormLabel>
-          <AutoComplete
-            openOnFocus
-            value={formData.therapyFocus}
-            onChange={(value) => {
-              setFormData({ ...formData, therapyFocus: value });
-            }}
-          >
-            <AutoCompleteInput variant="filled" />
-            <AutoCompleteList>
-              {therapyFocus.map((focus, cid) => (
-                <AutoCompleteItem
-                  style={{ textAlign: "left" }}
-                  key={`option-${cid}`}
-                  value={focus}
-                  textTransform="capitalize"
-                >
-                  {focus}
-                </AutoCompleteItem>
-              ))}
-            </AutoCompleteList>
-          </AutoComplete>
-        </FormControl>
-      ),
-    },
-    {
-      label: "Number of Times per week",
-      component: (
-        <FormControl id="noTimesPerWeek">
-          <FormLabel>How many times per week are you looking for?</FormLabel>
-          <Select
-            placeholder=""
-            value={formData.noTimesPerWeek}
-            onChange={(e) =>
-              setFormData({ ...formData, noTimesPerWeek: e.target.value })
+        <FormControl id="therapyMethods" isRequired>
+          <FormLabel>
+            Select your preference for your therapy methods, if any.
+          </FormLabel>
+          <CheckboxGroup
+            value={formData.therapyMethods}
+            onChange={(values) =>
+              setFormData({ ...formData, therapyMethods: values })
             }
           >
-            <option value="1-2">1-2</option>
-            <option value="3-4">3-4</option>
-            <option value="5-7">5-7</option>
-          </Select>
+            <Stack>
+              {therapyMethods.map((mode, index) => (
+                <Checkbox
+                  key={index}
+                  value={mode}
+                  style={{ textAlign: "left" }}
+                  isRequired={false}
+                >
+                  {mode}
+                </Checkbox>
+              ))}
+            </Stack>
+          </CheckboxGroup>
         </FormControl>
       ),
     },
-    // {
-    //   label: "Filler",
-    //   component: <></>,
-    // },
+    {
+      label: "Certification",
+      component: (
+        <FormControl id="certification" isRequired>
+          <FormLabel>
+            Select your preference for your therapist&apos;s gender, if any.
+          </FormLabel>
+          <CheckboxGroup
+            value={formData.certification}
+            onChange={(values) =>
+              setFormData({ ...formData, certification: values })
+            }
+          >
+            <Stack>
+              {certification.map((mode, index) => (
+                <Checkbox
+                  key={index}
+                  value={mode}
+                  style={{ textAlign: "left" }}
+                  isRequired={false}
+                >
+                  {mode}
+                </Checkbox>
+              ))}
+            </Stack>
+          </CheckboxGroup>
+        </FormControl>
+      ),
+    },
+    {
+      label: "Filler",
+      component: <></>,
+    },
   ];
 
   const handleNext = () => {
@@ -342,7 +306,9 @@ const TherapyForm = () => {
     e.preventDefault();
     dispatch(createProfile(formData));
     // placeholder: randomly choosing 3 therapists from list of therapists to match
-    const shuffledTherapists = [...allTherapists].sort(() => 0.5 - Math.random());
+    const shuffledTherapists = [...allTherapists].sort(
+      () => 0.5 - Math.random()
+    );
     const selectedTherapists = shuffledTherapists.slice(0, 3);
     dispatch(addTherapistMatches(selectedTherapists));
     console.log("Form submitted:", formData);
