@@ -11,7 +11,7 @@ export default function Header({isEditing,onEdit}) {
     w='100%' height='240px' pt='80px'>
       <HStack spacing='40px'>
         <Avatar size="xl" ml = '15%'></Avatar>
-        <Box>
+        <Box style={{textAlign: "left"}}>
           <Heading fontWeight='500' fontSize='30px' color='#000000'>
             First Name Last Name
           </Heading>
