@@ -7,15 +7,16 @@ export const userSlice = createSlice({
       age: 21,
       gender: "Female",
       sexuality: "Asexual",
-      relationshipStatus: "Single",
-      religiousBeliefs: "Christianity",
-      therapyMode: "Online",
-      minbudget: 100,
-      maxbudget: 200,
       location: "Surrey, BC",
-      language: "English",
-      // noTimesPerWeek: "",
-      therapyFocus: "Grief or Death",
+      budget: [100, 200],
+      therapyMode: "Online",
+      therapyFocus: ["Grief or Death", "Bullying"],
+      therapistGender: "Female",
+      therapyMethods: ["Narrative Therapy", "Solution Focused Therapy"],
+      certification: [
+        "Registered Psychological Assistant",
+        "RCSW: Registered Clinical Social Worker",
+      ],
     },
     allTherapists: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], // TO DO: replace items with scraped therapists
     matchedTherapists: [],
@@ -25,7 +26,7 @@ export const userSlice = createSlice({
       state.value = action.payload;
     },
     updateProfile: (state, action) => {
-      state.value =action.payload;
+      state.value = action.payload;
     },
     addTherapistMatches: (state, action) => {
       state.matchedTherapists = action.payload;

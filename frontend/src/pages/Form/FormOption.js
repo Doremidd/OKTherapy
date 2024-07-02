@@ -14,22 +14,7 @@ export const sexualities = [
   "Asexual",
   "Prefer not to disclose",
 ];
-export const relationshipStatuses = [
-  "Single",
-  "In a Relationship",
-  "Married",
-  "Divorced",
-  "Widowed",
-];
-export const religiousBeliefs = [
-  "Christianity",
-  "Judaism",
-  "Islam",
-  "Hinduism",
-  "Buddhism",
-  "Sikhism",
-  "Atheism/Agnosticism",
-];
+
 export const languages = [
   "English",
   "Farci",
@@ -59,4 +44,40 @@ export const therapyFocus = [
   "Sexual Assault",
   "Stress Management",
   "Trauma",
+];
+export const therapyMethods = [
+  "Acceptance & Commitment",
+  "ADD and ADHD Coping Strategies",
+  "Emotion Focused Therapy",
+  "Cognitive Behavioural Therapy (CBT)",
+  "Communication Skills Training",
+  "Dialectical Behaviour Therapy",
+  "EMDR",
+  "Marriage & Couples Counselling",
+  "Mindfulness approaches",
+  "Narrative Therapy",
+  "Solution Focused Therapy",
+  "Somatic Approaches",
+];
+
+export const certification = [
+  "ATR: Registered Art Therapist",
+  "BCATR: BC Art Therapist Registered",
+  "CCC: Canadian Certifed Counsellor",
+  "R.Psych: Registered Psychologist",
+  "RCAT: Registered Art Therapist",
+  "RCC: Registered Clinical Counsellor",
+  "RMFT: Registered Marriage and Family Therapist",
+  "RSW: Registered Social Worker",
+  "MTA: Music Therapist Accredited",
+  "Registered Psychological Assistant",
+  "RCSW: Registered Clinical Social Worker",
+  "RCC-ACS: Registered Clinical Counsellor-Approved Clinical Supervisor",
+];
+
+export const therapistGender = [
+  "Male",
+  "Female",
+  "Non-Binary/Genderqueer",
+  "No preference",
 ];
