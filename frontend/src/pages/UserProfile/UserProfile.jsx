@@ -26,7 +26,7 @@ import {
   therapistGender,
   therapyMethods,
   certification,
-} from "../Form/FormOption";
+} from "../../constants/formOptions";
 import { useSelector, useDispatch } from "react-redux";
 
 const UserProfile = () => {

@@ -23,7 +23,7 @@ import {
   therapyFocus,
   therapyMethods,
   therapyModes,
-} from "./FormOption";
+} from "../../constants/formOptions";
 import { useDispatch, useSelector } from "react-redux";
 import { addTherapistMatches, createProfile } from "../../redux/reducer";
 

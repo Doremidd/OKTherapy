@@ -5,7 +5,7 @@ import {
   therapyMethods,
   therapyModes,
   certification,
-} from "./FormOption";
+} from "./formOptions";
 
 export const FormData = {
   age: Number,
