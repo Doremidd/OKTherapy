@@ -1,24 +1,57 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
+const User = require("../model");
 
-// const readUsersFromFile = () => {
-//   return JSON.parse(fs.readFileSync(path.join(__dirname, '../data/users.json')));
-// }
+// GET a specific user
+router.get("/:username", async function (req, res, next) {
+  const foundUser = await User.findOne({ name: req.params.username });
+  if (!foundUser) return res.status(404).send({ message: "User not found" });
+  const userObject = {
+    username: req.params.username,
+    profile: {
+      age: foundUser.age,
+      gender: foundUser.gender,
+      sexuality: foundUser.sexuality,
+      location: foundUser.location,
+      budget: foundUser.budget,
+      therapyMode: foundUser.therapyMode,
+      therapistGender: foundUser.therapistGender,
+      therapyMethods: foundUser.therapyMethods,
+      certification: foundUser.certification,
+    },
+    matchedTherapists: foundUser.matchedTherapists,
+  };
+  return res.send(userObject);
+});
 
-// let users = readUsersFromFile();
+// POST a user
+router.post("/", async function (req, res, next) {
+  const user = new User({
+    username: req.params.username,
+    age: foundUser.age,
+    gender: foundUser.gender,
+    sexuality: foundUser.sexuality,
+    location: foundUser.location,
+    budget: foundUser.budget,
+    therapyMode: foundUser.therapyMode,
+    therapistGender: foundUser.therapistGender,
+    therapyMethods: foundUser.therapyMethods,
+    certification: foundUser.certification,
+  });
+  await user.save();
+  return res.send(user);
+});
 
-// /* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send(users);
-// });
+// PATCH: update a user
+router.patch("/:username", function (req, res, next) {
+  // TO DO
+});
 
-// router.get('/therapists', (req, res) => {
-//   const therapists = fs.readFileSync(path.join(__dirname, '../data/therapists.json'));
-//   res.send(therapists);
-// });
-
-
+// PUT: Assign therapists to a user's assigned therapist db field
+router.put("/:username/therapists", function (req, res, next) {
+  // Algorithm logic
+})
 
 module.exports = router;
