@@ -6,10 +6,11 @@ const User = require("../model");
 
 // GET a specific user
 router.get("/:username", async function (req, res, next) {
-  const foundUser = await User.findOne({ name: req.params.username });
+  const userName = decodeURIComponent(req.params.username)
+  const foundUser = await User.findOne({ userName: userName });
   if (!foundUser) return res.status(404).send({ message: "User not found" });
   const userObject = {
-    username: req.params.username,
+    userName,
     profile: {
       age: foundUser.age,
       gender: foundUser.gender,
@@ -28,17 +29,18 @@ router.get("/:username", async function (req, res, next) {
 
 // POST a user
 router.post("/", async function (req, res, next) {
+  const body = req.body;
   const user = new User({
-    username: req.params.username,
-    age: foundUser.age,
-    gender: foundUser.gender,
-    sexuality: foundUser.sexuality,
-    location: foundUser.location,
-    budget: foundUser.budget,
-    therapyMode: foundUser.therapyMode,
-    therapistGender: foundUser.therapistGender,
-    therapyMethods: foundUser.therapyMethods,
-    certification: foundUser.certification,
+    userName: body.userName,
+    age: body.age,
+    gender: body.gender,
+    sexuality: body.sexuality,
+    location: body.location,
+    budget: body.budget,
+    therapyMode: body.therapyMode,
+    therapistGender: body.therapistGender,
+    therapyMethods: body.therapyMethods,
+    certification: body.certification,
   });
   await user.save();
   return res.send(user);
