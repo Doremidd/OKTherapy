@@ -29,19 +29,7 @@ router.get("/:username", async function (req, res, next) {
 
 // POST a user
 router.post("/", async function (req, res, next) {
-  const body = req.body;
-  const user = new User({
-    userName: body.userName,
-    age: body.age,
-    gender: body.gender,
-    sexuality: body.sexuality,
-    location: body.location,
-    budget: body.budget,
-    therapyMode: body.therapyMode,
-    therapistGender: body.therapistGender,
-    therapyMethods: body.therapyMethods,
-    certification: body.certification,
-  });
+  const user = new User(req.body);
   await user.save();
   return res.send(user);
 });
