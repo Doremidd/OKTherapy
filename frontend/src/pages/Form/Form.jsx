@@ -136,7 +136,7 @@ const TherapyForm = () => {
         <FormControl id="location" isRequired>
           <FormLabel>Where are you located?</FormLabel>
           <Input
-            placeholder="Type your preferred location"
+            placeholder="Where are you located?"
             value={formData.location}
             onChange={(e) =>
               setFormData({ ...formData, location: e.target.value })
@@ -149,7 +149,7 @@ const TherapyForm = () => {
       label: "Budget",
       component: (
         <FormControl id="budget" isRequired>
-          <FormLabel>What’s your budget?</FormLabel>
+          <FormLabel>What is your budget?</FormLabel>
           <BudgetSlider formData={formData} setFormData={setFormData} />
         </FormControl>
       ),
@@ -180,7 +180,7 @@ const TherapyForm = () => {
       label: "Therapy focus",
       component: (
         <FormControl id="therapyFocus" isRequired>
-          <FormLabel>What are you currently struggling with?</FormLabel>
+          <FormLabel>What are the main issues you want to address in therapy?</FormLabel>
           <CheckboxGroup
             value={formData.therapyFocus}
             onChange={(values) =>
@@ -204,34 +204,11 @@ const TherapyForm = () => {
       ),
     },
     {
-      label: "Preferred Therapist Gender",
-      component: (
-        <FormControl id="therapistGender" isRequired>
-          <FormLabel>
-            Select your preference for your therapist&apos;s gender, if any.
-          </FormLabel>
-          <Select
-            placeholder="Select your preferred therapist gender."
-            value={formData.therapistGender}
-            onChange={(e) =>
-              setFormData({ ...formData, therapistGender: e.target.value })
-            }
-          >
-            {therapistGender.map((gender, index) => (
-              <option key={index} value={gender}>
-                {gender}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-      ),
-    },
-    {
       label: "Preferred Therapy Methods",
       component: (
         <FormControl id="therapyMethods" isRequired>
           <FormLabel>
-            Select your preference for your therapy methods, if any.
+          What type of therapy are you interested in?
           </FormLabel>
           <CheckboxGroup
             value={formData.therapyMethods}
@@ -256,11 +233,34 @@ const TherapyForm = () => {
       ),
     },
     {
+      label: "Preferred Therapist Gender",
+      component: (
+        <FormControl id="therapistGender" isRequired>
+          <FormLabel>
+          Do you have a preference for the therapist&apos;s gender?
+          </FormLabel>
+          <Select
+            placeholder="Do you have a preference for the therapist&apos;s gender?"
+            value={formData.therapistGender}
+            onChange={(e) =>
+              setFormData({ ...formData, therapistGender: e.target.value })
+            }
+          >
+            {therapistGender.map((gender, index) => (
+              <option key={index} value={gender}>
+                {gender}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+      ),
+    },
+    {
       label: "Certification",
       component: (
         <FormControl id="certification" isRequired>
           <FormLabel>
-            Select your preference for your therapist&apos;s gender, if any.
+            Do you have a preference for the therapist&apos;s certification?
           </FormLabel>
           <CheckboxGroup
             value={formData.certification}
