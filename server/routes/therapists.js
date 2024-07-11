@@ -1,8 +1,10 @@
-const express = require('express');
-const Therapist = require('../model/therapistModel');
-const router = express.Router();
+var express = require("express");
+var router = express.Router();
+const fs = require("fs");
+const path = require("path");
+const Therapist = require('../models/therapistModel')
 
-// Get all therapists
+/* GET all therapists. */
 router.get('/', async (req, res) => {
   try {
     const therapists = await Therapist.find();
@@ -12,5 +14,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+router.put("/", function (req, res, next) {
+  // Stretch requirement: update a therapist
+});
 
+
+module.exports = router;

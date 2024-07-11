@@ -1,40 +1,57 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createUserAsync, getUserAsync } from "./thunk";
 
-export const userSlice = createSlice({
-  name: "user",
-  initialState: {
-    value: {
-      age: 21,
-      gender: "Female",
-      sexuality: "Asexual",
-      location: "Surrey, BC",
-      budget: [100, 200],
-      therapyMode: "Online",
-      therapyFocus: ["Grief or Death", "Bullying"],
-      therapistGender: "Female",
-      therapyMethods: ["Narrative Therapy", "Solution Focused Therapy"],
-      certification: [
-        "Registered Psychological Assistant",
-        "RCSW: Registered Clinical Social Worker",
-      ],
-    },
-    allTherapists: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], // TO DO: replace items with scraped therapists
-    matchedTherapists: [],
-  },
-  reducers: {
-    createProfile: (state, action) => {
-      state.value = action.payload;
-    },
-    updateProfile: (state, action) => {
-      state.value = action.payload;
-    },
-    addTherapistMatches: (state, action) => {
-      state.matchedTherapists = action.payload;
-    },
-  },
-});
+const REQUEST_STATE = {
+  IDLE: "IDLE",
+  PENDING: "PENDING",
+  FULFILLED: "FULFILLED",
+  REJECTED: "REJECTED",
+};
 
-export const { createProfile, updateProfile, addTherapistMatches } =
-  userSlice.actions;
+const INITIAL_STATE = {
+  profile: {},
+  matchedTherapists: [],
+  createUser: REQUEST_STATE.IDLE,
+  getUser: REQUEST_STATE.IDLE,
+  error: null,
+};
 
+export const userSlice = createSlice(
+  {
+    name: "user",
+    initialState: INITIAL_STATE,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder
+        // get user / GET
+        .addCase(getUserAsync.pending, (state) => {
+          state.getUser = REQUEST_STATE.PENDING;
+          state.error = null;
+        })
+        .addCase(getUserAsync.fulfilled, (state, action) => {
+          state.getUser = REQUEST_STATE.FULFILLED;
+          state.profile = action.payload.profile;
+          state.matchedTherapists = action.payload.matchedTherapists;
+        })
+        .addCase(getUserAsync.rejected, (state, action) => {
+          state.getUser = REQUEST_STATE.REJECTED;
+          state.error = action.error;
+        })
+        // create user / POST
+        .addCase(createUserAsync.pending, (state) => {
+          state.createUser = REQUEST_STATE.PENDING;
+          state.error = null;
+        })
+        .addCase(createUserAsync.fulfilled, (state, action) => {
+          state.createUser = REQUEST_STATE.FULFILLED;
+          state.profile = action.payload;
+        })
+        .addCase(createUserAsync.rejected, (state, action) => {
+          state.createUser = REQUEST_STATE.REJECTED;
+          state.error = action.error;
+        })
+        // TO DO: update user cases
+    },
+  }
+);
 export default userSlice.reducer;

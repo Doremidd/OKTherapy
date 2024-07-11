@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import { updateProfile } from "../../redux/reducer";
+// import { updateProfile } from "../../redux/reducer";
 import {
   NumberInput,
   NumberInputField,
@@ -28,12 +28,39 @@ import {
   certification,
 } from "../../constants/formOptions";
 import { useSelector, useDispatch } from "react-redux";
+import { getUserAsync } from "../../redux/thunk";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const value = useSelector((state) => state.user.value);
-  const [profileValues, setProfileValues] = useState(value);
+  const value = useSelector((state) => state.user.profile);
+  const [profileValues, setProfileValues] = useState({
+    ...value,
+    budget: value?.budget || [100, 300],
+    age: value?.age || 0,
+    gender: value?.gender || "",
+    sexuality: value?.sexuality || "",
+    location: value?.location || "",
+    therapistModes: value?.therapistModes || "",
+    therapistGender: value?.therapistGender || "",
+    therapyFocus: value?.therapyFocus || [],
+    therapyMethods: value?.therapyMethods || [],
+    certification: value?.certification || [],
+  });
+  const { user } = useAuth0();
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user?.sub) {
+        const result = await dispatch(getUserAsync(user.sub));
+        if (result?.payload) {
+          setProfileValues(result.payload.profile);
+        }
+      }
+    };
+    fetchUserProfile();
+  }, [dispatch, user]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -46,7 +73,7 @@ const UserProfile = () => {
 
   const handleSave = () => {
     setIsEditing(false);
-    dispatch(updateProfile(profileValues));
+    // dispatch(updateProfile(profileValues));
   };
 
   const handleCheckboxChange = (category, item, checked) => {
@@ -73,7 +100,7 @@ const UserProfile = () => {
                 <Text>Age</Text>
                 <NumberInput
                   size="sm"
-                  value={profileValues.age}
+                  value={profileValues?.age}
                   onChange={(valueString) =>
                     setProfileValues({
                       ...profileValues,
@@ -95,7 +122,7 @@ const UserProfile = () => {
               <HStack width="40%">
                 <Text>Gender</Text>
                 <Select
-                  value={profileValues.gender}
+                  value={profileValues?.gender}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
@@ -117,7 +144,7 @@ const UserProfile = () => {
               <HStack width="40%">
                 <Text>Sexuality</Text>
                 <Select
-                  value={profileValues.sexuality}
+                  value={profileValues?.sexuality}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
@@ -137,7 +164,7 @@ const UserProfile = () => {
               <HStack width="40%">
                 <Text>Location</Text>
                 <Input
-                  value={profileValues.location}
+                  value={profileValues?.location}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
@@ -154,7 +181,7 @@ const UserProfile = () => {
                 <NumberInput
                   size="sm"
                   step={5}
-                  value={profileValues.budget[0]}
+                  value={profileValues?.budget?.[0] || 100}
                   onChange={(valueString) =>
                     setProfileValues((prevValues) => ({
                       ...prevValues,
@@ -178,7 +205,7 @@ const UserProfile = () => {
                 <NumberInput
                   size="sm"
                   step={5}
-                  value={profileValues.budget[1]}
+                  value={profileValues?.budget?.[1] || 300}
                   onChange={(valueString) =>
                     setProfileValues((prevValues) => ({
                       ...prevValues,
@@ -202,7 +229,7 @@ const UserProfile = () => {
               <HStack width="40%">
                 <Text>Therapy Mode</Text>
                 <Select
-                  value={profileValues.therapistModes}
+                  value={profileValues?.therapistModes}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
@@ -221,7 +248,7 @@ const UserProfile = () => {
               <HStack width="40%">
                 <Text>Therapist Gender</Text>
                 <Select
-                  value={profileValues.therapistGender}
+                  value={profileValues?.therapistGender}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
@@ -238,14 +265,14 @@ const UserProfile = () => {
                 </Select>
               </HStack>
             </HStack>
-            {(profileValues.therapyFocus.length > 0 || isEditing) && (
+            {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
                   {" "}
                   <Text>Therapy Focus:</Text>
                   {!isEditing && (
                     <Textarea
-                      placeholder={profileValues.therapyFocus.join(", ")}
+                      placeholder={profileValues?.therapyFocus.join(", ")}
                       disabled={true}
                     />
                   )}
@@ -255,7 +282,7 @@ const UserProfile = () => {
                     {therapyFocuses.map((focus, index) => (
                       <Checkbox
                         key={index}
-                        defaultChecked={profileValues.therapyFocus.includes(
+                        defaultChecked={profileValues?.therapyFocus?.includes(
                           focus
                         )}
                         onChange={(e) =>
@@ -274,14 +301,14 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
-            {(profileValues.therapyMethods.length > 0 || isEditing) && (
+            {(profileValues?.therapyMethods?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
                   {" "}
                   <Text>Therapy Methods:</Text>
                   {!isEditing && (
                     <Textarea
-                      placeholder={profileValues.therapyMethods.join(", ")}
+                      placeholder={profileValues?.therapyMethods?.join(", ")}
                       disabled={true}
                     />
                   )}
@@ -291,7 +318,7 @@ const UserProfile = () => {
                     {therapyMethods.map((method, index) => (
                       <Checkbox
                         key={index}
-                        defaultChecked={profileValues.therapyMethods.includes(
+                        defaultChecked={profileValues?.therapyMethods?.includes(
                           method
                         )}
                         onChange={(e) =>
@@ -310,14 +337,14 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
-            {(profileValues.certification.length > 0 || isEditing) && (
+            {(profileValues?.certification?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
                   {" "}
                   <Text>Therapist Certifications:</Text>
                   {!isEditing && (
                     <Textarea
-                      placeholder={profileValues.certification.join(", ")}
+                      placeholder={profileValues?.certification.join(", ")}
                       disabled={true}
                     />
                   )}
@@ -327,7 +354,7 @@ const UserProfile = () => {
                     {certification.map((cert, index) => (
                       <Checkbox
                         key={index}
-                        defaultChecked={profileValues.certification.includes(
+                        defaultChecked={profileValues?.certification.includes(
                           cert
                         )}
                         onChange={(e) =>

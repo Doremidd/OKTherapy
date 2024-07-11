@@ -24,14 +24,13 @@ import {
   therapyMethods,
   therapyModes,
 } from "../../constants/formOptions";
-import { useDispatch, useSelector } from "react-redux";
-import { addTherapistMatches, createProfile } from "../../redux/reducer";
+import { useDispatch } from "react-redux";
+import { createUserAsync } from "../../redux/thunk";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const TherapyForm = () => {
+  const { user } = useAuth0();
   const dispatch = useDispatch();
-  const allTherapists = useSelector((state) => {
-    return state?.user?.allTherapists;
-  });
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     age: "",
@@ -304,13 +303,7 @@ const TherapyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createProfile(formData));
-    // placeholder: randomly choosing 3 therapists from list of therapists to match
-    const shuffledTherapists = [...allTherapists].sort(
-      () => 0.5 - Math.random()
-    );
-    const selectedTherapists = shuffledTherapists.slice(0, 3);
-    dispatch(addTherapistMatches(selectedTherapists));
+    dispatch(createUserAsync({ userProfile: formData, username: user?.sub }));
     console.log("Form submitted:", formData);
     navigate("/matches");
   };
