@@ -1,22 +1,17 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const therapistSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
   },
-  age: {
-    type: Number,
-    min: 0,
-    max: 100,
-  },
   gender: {
     type: String,
-    enum: ["male", "female", "non-binary", "other"],
+    enum: ['Male', 'Female', 'Other'],
     required: true,
   },
   certification: {
-    type: String,
+    type: [String],
     required: true,
   },
   location: {
@@ -37,25 +32,28 @@ const therapistSchema = new mongoose.Schema({
   },
   onlineAvailability: {
     type: String,
-    enum: ["Yes", "No"],
+    enum: ['Yes', 'No'],
     required: true,
   },
   inPersonAvailability: {
     type: String,
-    enum: ["Yes", "No"],
+    enum: ['Yes', 'No'],
     required: true,
   },
   phone: {
     type: String,
     required: true,
   },
-  email: {
+  website: {
     type: String,
-    required: true,
-    match: [/^\S+@\S+\.\S+$/, "Please use a valid email address."],
+    required: false,
   },
+  image: {
+    type: String,
+    required: false,
+  }
 });
 
-const Therapist = mongoose.model("Therapists", therapistSchema, "Therapists");
+const Therapist = mongoose.model('Therapist', therapistSchema);
 
 module.exports = Therapist;
