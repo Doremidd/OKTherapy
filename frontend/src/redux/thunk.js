@@ -4,7 +4,7 @@ import UserService from "./service";
 import TherapistService from "./therapistService";
 
 
-export const getUserAsync = createAsyncThunk(actionTypes.GET_USER, async (userName) => {
+export const getUserAsync = createAsyncThunk(actionTypes.GET_USER, async (userID) => {
   return await UserService.getUser(userName);
 });
 

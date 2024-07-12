@@ -4,12 +4,13 @@ const fs = require("fs");
 const path = require("path");
 const User = require("../models/userModel");
 
+
 // GET a specific user
-router.get("/:username", async function (req, res, next) {
-  const userName = decodeURIComponent(req.params.username)
-  const foundUser = await User.findOne({ userName: userName });
+router.get("/:userID", async function (req, res, next) {
+  const foundUser = await User.findOne({ userID: userID });
   if (!foundUser) return res.status(404).send({ message: "User not found" });
   const userObject = {
+    userID,
     userName,
     profile: {
       age: foundUser.age,
@@ -30,7 +31,7 @@ router.get("/:username", async function (req, res, next) {
 // POST a user
 router.post("/", async function (req, res, next) {
   try {
-    const user = new User(req.body);
+    const user = new User({ userID: sub, ...req.body });
     await user.save();
     res.status(201).json(user);
   } catch (err) {
@@ -64,10 +65,20 @@ router.post("/", async function (req, res, next) {
   // }
 // });
 
-// PATCH or PUT: update a user
-// @Selina if you want you can use Julia's skeleton for a PUT (commented out above) otherwise please delete it
-router.patch("/:username", function (req, res, next) {
-  // TO DO
+// PUT: update a user
+router.put("/:userID", async function (req, res, next) {
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { userID: req.params.userID },
+      req.body,
+      { new: true }
+    );
+    if (!updatedUser) return res.status(404).send({ message: 'User not found' });
+    res.send(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+
 });
 
 // PUT: Assign therapists to a user's assigned therapist db field
