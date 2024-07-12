@@ -13,7 +13,7 @@ import { LinkIcon, PhoneIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { getTherapistAsync } from "../../redux/thunk";
+import { getTherapist } from "../../redux/therapistSlice";
 
 const MatchCard = ({ therapistId }) => {
   const dispatch = useDispatch();
@@ -21,14 +21,28 @@ const MatchCard = ({ therapistId }) => {
 
   useEffect(() => {
     const fetchTherapist = async () => {
-      const result = await dispatch(getTherapistAsync(therapistId));
-      if (result?.payload) {
-        setTherapist(result.payload.profile);
+      try {
+        const response = await fetch(`http://localhost:3001/therapists/${therapistId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+        const data = await response.json();
+        setTherapist(data);
+        dispatch(getTherapist(data));
+      } catch (error) {
+        console.error('Error getting therapist', error);
       }
     };
+
     fetchTherapist();
   }, [dispatch, therapistId]);
 
+  if (!therapist) {
+    return <div>Loading...</div>;
+  }
+  
   return (
     <Accordion allowMultiple>
       <AccordionItem className="accordion">
