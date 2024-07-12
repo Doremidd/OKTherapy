@@ -15,7 +15,7 @@ export const createUserAsync = createAsyncThunk(
     }
   );
 
-export const updateUserAsync = updateAsyncThunk(
+export const updateUserAsync = createAsyncThunk(
   actionTypes.UPDATE_USER,
   async (userProfile,userID) => {
     return await UserService.updateUser(userProfile,userID);

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createUserAsync, getUserAsync } from "./thunk";
+import { createUserAsync, getUserAsync,updateUserAsync} from "./thunk";
 
 const REQUEST_STATE = {
   IDLE: "IDLE",
@@ -56,11 +56,11 @@ export const userSlice = createSlice(
           state.updateUser = REQUEST_STATE.PENDING;
           state.error = null;
         })
-        .addCase(createUserAsync.fulfilled, (state, action) => {
+        .addCase(updateUserAsync.fulfilled, (state, action) => {
           state.updateUser = REQUEST_STATE.FULFILLED;
           state.profile = action.payload.profile;
         })
-        .addCase(createUserAsync.rejected, (state, action) => {
+        .addCase(updateUserAsync.rejected, (state, action) => {
           state.updateUser = REQUEST_STATE.REJECTED;
           state.error = action.error;
         })
