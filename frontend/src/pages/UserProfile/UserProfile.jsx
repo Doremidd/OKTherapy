@@ -68,12 +68,12 @@ const UserProfile = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
-    setProfileValues(value);
+    // setProfileValues(profileValues);
   };
 
   const handleSave = () => {
     setIsEditing(false);
-    // dispatch(updateProfile(profileValues));
+    dispatch(updateProfile(profileValues));
   };
 
   const handleCheckboxChange = (category, item, checked) => {
@@ -164,7 +164,7 @@ const UserProfile = () => {
               <HStack width="40%">
                 <Text>Location</Text>
                 <Input
-                  value={profileValues?.location}
+                  value={profileValues.location}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
@@ -229,7 +229,7 @@ const UserProfile = () => {
               <HStack width="40%">
                 <Text>Therapy Mode</Text>
                 <Select
-                  value={profileValues?.therapistModes}
+                  value={profileValues.therapistModes}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
@@ -265,6 +265,7 @@ const UserProfile = () => {
                 </Select>
               </HStack>
             </HStack>
+        <HStack spacing='24px' align = "start">
             {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
@@ -301,7 +302,7 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
-            {(profileValues?.therapyMethods?.length > 0 || isEditing) && (
+            {(profileValues.therapyMethods?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
                   {" "}
@@ -337,6 +338,7 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
+            </HStack>
             {(profileValues?.certification?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
@@ -354,7 +356,7 @@ const UserProfile = () => {
                     {certification.map((cert, index) => (
                       <Checkbox
                         key={index}
-                        defaultChecked={profileValues?.certification.includes(
+                        defaultChecked={profileValues?.certification?.includes(
                           cert
                         )}
                         onChange={(e) =>
@@ -373,7 +375,7 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
-          </VStack>
+        </VStack>
         </Box>
       </div>
       {isEditing && <Footer onCancel={handleCancel} onSave={handleSave} />}
