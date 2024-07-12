@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { actionTypes } from "./actionTypes";
-import UserService  from "./service";
+import UserService from "./service";
+import TherapistService from "./therapistService";
+
 
 export const getUserAsync = createAsyncThunk(actionTypes.GET_USER, async (userName) => {
   return await UserService.getUser(userName);
@@ -17,3 +19,7 @@ export const updateUserAsync = createAsyncThunk(
   actionTypes.UPDATE_USER
   // TO DO
 );
+
+export const getTherapistAsync = createAsyncThunk(actionTypes.GET_THERAPIST, async (therapistId) => {
+  return await TherapistService.getTherapist(therapistId);
+});

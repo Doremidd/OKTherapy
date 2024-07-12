@@ -8,9 +8,9 @@ const TherapistList = () => {
         <Text fontSize="3xl" fontWeight="500" className="alignLeft">
           YOUR MATCHES
         </Text>
-        <MatchCard therapistId="668f2bb281a75964a9eedc81" />
-        <MatchCard therapistId="668f2bb281a75964a9eedc82" />
-        <MatchCard therapistId="668f2bb281a75964a9eedc83" />
+        <MatchCard therapistId="6690d8a581a75964a9c267b0" />
+        <MatchCard therapistId="6690d8a581a75964a9c267b1" />
+        <MatchCard therapistId="6690d8a581a75964a9c267b2" />
     </Container>
   );
 };

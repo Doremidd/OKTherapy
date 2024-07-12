@@ -12,8 +12,9 @@ var therapistRouter = require("./routes/therapists");
 
 var app = express();
 
+const mongoUri = 'mongodb+srv://m001-student:m001-mongodb-basics2@sandbox.f7rmphl.mongodb.net/OkTherapy?retryWrites=true&w=majority&appName=Sandbox';
 mongoose
-  .connect(process.env.MONGO_DB_URI)
+  .connect(mongoUri)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
 

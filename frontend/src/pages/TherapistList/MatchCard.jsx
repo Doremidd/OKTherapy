@@ -9,38 +9,25 @@ import {
   Button,
 } from "@chakra-ui/react";
 import "./style.css";
-import { EmailIcon, PhoneIcon } from "@chakra-ui/icons";
+import { LinkIcon, PhoneIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { getTherapistAsync } from "../../redux/thunk";
 
 const MatchCard = ({ therapistId }) => {
+  const dispatch = useDispatch();
   const [therapist, setTherapist] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTherapist = async () => {
-      try {
-        const response = await fetch(`http://localhost:3001/therapists/${therapistId}`, {
-          method: "GET",
-        });
-        const data = await response.json();
-        setTherapist(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching therapist data:', error);
-        setLoading(false);
+      const result = await dispatch(getTherapistAsync(therapistId));
+      if (result?.payload) {
+        setTherapist(result.payload.profile);
       }
     };
     fetchTherapist();
-  }, [therapistId]);
-
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (!therapist) {
-    return <Text>Therapist not found</Text>;
-  }
+  }, [dispatch, therapistId]);
 
   return (
     <Accordion allowMultiple>
@@ -71,7 +58,7 @@ const MatchCard = ({ therapistId }) => {
             <br></br>
             <Button
               size="sm"
-              leftIcon={<EmailIcon />}
+              leftIcon={<LinkIcon />}
               colorScheme="brand"
               variant="outline"
               className="leftButton"
