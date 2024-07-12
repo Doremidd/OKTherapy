@@ -3,6 +3,7 @@ var router = express.Router();
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/userModel");
+const Therapist = require("../models/therapistModel");
 
 // GET a specific user
 router.get("/:username", async function (req, res, next) {
@@ -71,8 +72,35 @@ router.patch("/:username", function (req, res, next) {
 });
 
 // PUT: Assign therapists to a user's assigned therapist db field
-router.put("/:username/therapists", function (req, res, next) {
-  // Algorithm logic
+router.put("/:username/therapists", async function (req, res, next) {
+  const userName = decodeURIComponent(req.params.username);
+  const foundUser = await User.findOne({ userName: userName });
+  if (!foundUser) return res.status(404).send({ message: "User not found" });
+
+  const matchingCriteria = {
+    fee: { $lte: foundUser.budget[1] }, // taking the upper end as max budget and querying on everything lower
+    gender: foundUser.therapistGender,
+    approachesUsed: { $in: foundUser.therapyMethods },
+    certification: { $in: foundUser.certification }
+  };
+
+  if (foundUser.therapyMode === 'Online') {
+    matchingCriteria.onlineAvailability = 'Yes';
+  } else if (foundUser.therapyMode === 'InPerson') {
+    matchingCriteria.inPersonAvailability = 'Yes';
+  } else {
+    matchingCriteria.onlineAvailability = 'Yes';
+    matchingCriteria.inPersonAvailability = 'Yes';
+  }
+
+  const matchedTherapists = await Therapist.find(matchingCriteria);
+
+  matchedTherapists = matchedTherapists.slice(0, 5);
+
+  foundUser.matchedTherapists = matchedTherapists;
+  await foundUser.save();
+
+  return res.send(foundUser);
 })
 
 module.exports = router;
