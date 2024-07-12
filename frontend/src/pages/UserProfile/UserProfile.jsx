@@ -68,12 +68,12 @@ const UserProfile = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
-    // setProfileValues(profileValues);
+    setProfileValues(value);
   };
 
   const handleSave = () => {
     setIsEditing(false);
-    dispatch(updateProfile(profileValues));
+    dispatch(updateProfile(profileValues,user?.sub));
   };
 
   const handleCheckboxChange = (category, item, checked) => {

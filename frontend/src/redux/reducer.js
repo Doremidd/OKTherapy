@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   matchedTherapists: [],
   createUser: REQUEST_STATE.IDLE,
   getUser: REQUEST_STATE.IDLE,
+  updateUser:REQUEST_STATE.IDLE,
   error: null,
 };
 
@@ -44,13 +45,26 @@ export const userSlice = createSlice(
         })
         .addCase(createUserAsync.fulfilled, (state, action) => {
           state.createUser = REQUEST_STATE.FULFILLED;
-          state.profile = action.payload;
+          state.profile = action.payload.profile;
         })
         .addCase(createUserAsync.rejected, (state, action) => {
           state.createUser = REQUEST_STATE.REJECTED;
           state.error = action.error;
         })
-        // TO DO: update user cases
+        // Update user cases
+        .addCase(updateUserAsync.pending, (state) => {
+          state.updateUser = REQUEST_STATE.PENDING;
+          state.error = null;
+        })
+        .addCase(createUserAsync.fulfilled, (state, action) => {
+          state.updateUser = REQUEST_STATE.FULFILLED;
+          state.profile = action.payload.profile;
+        })
+        .addCase(createUserAsync.rejected, (state, action) => {
+          state.updateUser = REQUEST_STATE.REJECTED;
+          state.error = action.error;
+        })
+
     },
   }
 );
