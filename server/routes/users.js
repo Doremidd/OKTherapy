@@ -7,11 +7,10 @@ const User = require("../models/userModel");
 
 
 // GET a specific user
-router.get("/:userID", async function (req, res, next) {
-  const foundUser = await User.findOne({ userID: req.params.userID });
+router.get("/:userName", async function (req, res, next) {
+  const foundUser = await User.findOne({ userName: req.params.userName });
   if (!foundUser) return res.status(404).send({ message: "User not found" });
   const userObject = {
-    userID: foundUser.userID,
     userName: foundUser.userName,
     profile: {
       age: foundUser.age,
@@ -32,8 +31,8 @@ router.get("/:userID", async function (req, res, next) {
 // POST a user
 router.post("/", async function (req, res, next) {
   try {
-    const { userID, userName, profile } = req.body;
-    const newUser = new User({ userID, userName,profile });
+    const { userName, userProfile } = req.body;
+    const newUser = new User({userName,userProfile });
     await newUser.save();
     res.send(newUser);
     console.log(newUser);
@@ -44,10 +43,10 @@ router.post("/", async function (req, res, next) {
 
 
 // PUT: update a user
-router.put("/:userID", async function (req, res, next) {
+router.put("/:userName", async function (req, res, next) {
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { userID: req.params.userID},
+      { userName: req.params.userName},
       req.body,
       { new: true }
     );

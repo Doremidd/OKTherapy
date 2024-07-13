@@ -1,10 +1,10 @@
-const createUser = async (userProfile,userID,userName) => {
+const createUser = async (userProfile,userName) => {
   const response = await fetch("http://localhost:3001/users", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ userProfile, userID, userName }),
+    body: JSON.stringify({ userProfile,userName }),
   });
 
   const data = await response.json();
@@ -27,9 +27,9 @@ const getUser = async (userID) => {
   return response.json();
 };
 
-// TO DO: updateUser function
-const updateUser = async (userProfile,userID) => {
-  const response = await fetch(`http://localhost:3001/users/${userID}`, {
+//updateUser function
+const updateUser = async (userProfile,userName) => {
+  const response = await fetch(`http://localhost:3001/users/${userName}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

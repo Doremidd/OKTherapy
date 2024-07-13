@@ -4,21 +4,21 @@ import UserService from "./service";
 import TherapistService from "./therapistService";
 
 
-export const getUserAsync = createAsyncThunk(actionTypes.GET_USER, async (userID) => {
-  return await UserService.getUser(userID);
+export const getUserAsync = createAsyncThunk(actionTypes.GET_USER, async (userName) => {
+  return await UserService.getUser(userName);
 });
 
 export const createUserAsync = createAsyncThunk(
     actionTypes.CREATE_USER,
-    async ({ userProfile, userID, userName }) => {
-      return await UserService.createUser(userProfile,userID,userName);
+    async ({ userProfile, userName }) => {
+      return await UserService.createUser(userProfile,userName);
     }
   );
 
 export const updateUserAsync = createAsyncThunk(
   actionTypes.UPDATE_USER,
-  async (userProfile,userID) => {
-    return await UserService.updateUser(userProfile,userID);
+  async (userProfile,userName) => {
+    return await UserService.updateUser(userProfile,userName);
   }
 );
 

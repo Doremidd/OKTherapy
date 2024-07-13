@@ -293,7 +293,7 @@ const TherapyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createUserAsync({ userProfile: formData, username: user?.sub }));
+    dispatch(createUserAsync({ userProfile: formData, userName: user?.sub }));
     console.log("Form submitted:", formData);
     navigate("/matches");
   };
