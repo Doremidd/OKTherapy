@@ -34,9 +34,9 @@ router.post("/", async function (req, res, next) {
   try {
     const { userID, userName, profile } = req.body;
     const newUser = new User({ userID, userName,profile });
-    console.log(newUser);
     await newUser.save();
     res.send(newUser);
+    console.log(newUser);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
