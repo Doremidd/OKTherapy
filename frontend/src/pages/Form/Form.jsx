@@ -206,9 +206,7 @@ const TherapyForm = () => {
       label: "Preferred Therapy Methods",
       component: (
         <FormControl id="therapyMethods" isRequired>
-          <FormLabel>
-          What type of therapy are you interested in?
-          </FormLabel>
+          <FormLabel>What type of therapy are you interested in?</FormLabel>
           <CheckboxGroup
             value={formData.therapyMethods}
             onChange={(values) =>
@@ -235,9 +233,7 @@ const TherapyForm = () => {
       label: "Preferred Therapist Gender",
       component: (
         <FormControl id="therapistGender" isRequired>
-          <FormLabel>
-          Do you have a preference for the therapist&apos;s gender?
-          </FormLabel>
+          <FormLabel>Do you have a preference for the therapist&apos;s gender?</FormLabel>
           <Select
             placeholder="Do you have a preference for the therapist&apos;s gender?"
             value={formData.therapistGender}
@@ -258,9 +254,7 @@ const TherapyForm = () => {
       label: "Certification",
       component: (
         <FormControl id="certification" isRequired>
-          <FormLabel>
-            Do you have a preference for the therapist&apos;s certification?
-          </FormLabel>
+          <FormLabel>Do you have a preference for the therapist&apos;s certification?</FormLabel>
           <CheckboxGroup
             value={formData.certification}
             onChange={(values) =>
@@ -283,10 +277,6 @@ const TherapyForm = () => {
         </FormControl>
       ),
     },
-    {
-      label: "Filler",
-      component: <></>,
-    },
   ];
 
   const handleNext = () => {
@@ -303,7 +293,7 @@ const TherapyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createUserAsync({ userProfile: formData, userID: user?.sub, userName:user?.name}));
+    dispatch(createUserAsync({ userProfile: formData, username: user?.sub }));
     console.log("Form submitted:", formData);
     navigate("/matches");
   };
@@ -336,7 +326,7 @@ const TherapyForm = () => {
           {steps[step].component}
           <Box mt={5} display="flex" justifyContent="space-between">
             {step > 0 && <Button onClick={handlePrevious}>Previous</Button>}
-            {step < steps.length - 1 ? (
+            {step < steps.length - 2 ? (
               <Button colorScheme="teal" onClick={handleNext}>
                 Next
               </Button>
