@@ -15,8 +15,8 @@ const createUser = async (userProfile,userName) => {
   return data;
 };
 
-const getUser = async (userID) => {
-  const response = await fetch(`http://localhost:3001/users/${userID}`, {
+const getUser = async (userName) => {
+  const response = await fetch(`http://localhost:3001/users/${userName}`, {
     method: "GET",
   });
   if (!response.ok) {
