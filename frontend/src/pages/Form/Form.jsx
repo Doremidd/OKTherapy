@@ -326,7 +326,7 @@ const TherapyForm = () => {
           {steps[step].component}
           <Box mt={5} display="flex" justifyContent="space-between">
             {step > 0 && <Button onClick={handlePrevious}>Previous</Button>}
-            {step < steps.length - 2 ? (
+            {step < steps.length - 1 ? (
               <Button colorScheme="teal" onClick={handleNext}>
                 Next
               </Button>
