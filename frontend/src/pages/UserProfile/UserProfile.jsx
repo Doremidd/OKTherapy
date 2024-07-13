@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-// import { updateProfile } from "../../redux/reducer";
 import {
   NumberInput,
   NumberInputField,
@@ -28,7 +27,7 @@ import {
   certification,
 } from "../../constants/formOptions";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserAsync } from "../../redux/thunk";
+import { getUserAsync,updateUserAsync } from "../../redux/thunk";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const UserProfile = () => {
@@ -62,6 +61,15 @@ const UserProfile = () => {
     fetchUserProfile();
   }, [dispatch, user]);
 
+  // useEffect(async() => {
+  //   if(user?.sub){
+  //   await dispatch(getUserAsync(user.sub)); 
+  //   setProfileValues(value);
+  //   }
+  // },[dispatch,user])
+
+
+
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -73,7 +81,7 @@ const UserProfile = () => {
 
   const handleSave = () => {
     setIsEditing(false);
-    // dispatch(updateProfile(profileValues));
+    dispatch(updateUserAsync({userProfile:profileValues,userName:user?.sub}));
   };
 
   const handleCheckboxChange = (category, item, checked) => {
@@ -265,6 +273,7 @@ const UserProfile = () => {
                 </Select>
               </HStack>
             </HStack>
+        <HStack spacing='30px' align = "start">
             {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
@@ -337,6 +346,7 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
+            </HStack>
             {(profileValues?.certification?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
@@ -354,7 +364,7 @@ const UserProfile = () => {
                     {certification.map((cert, index) => (
                       <Checkbox
                         key={index}
-                        defaultChecked={profileValues?.certification.includes(
+                        defaultChecked={profileValues?.certification?.includes(
                           cert
                         )}
                         onChange={(e) =>
@@ -373,7 +383,7 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
-          </VStack>
+        </VStack>
         </Box>
       </div>
       {isEditing && <Footer onCancel={handleCancel} onSave={handleSave} />}

@@ -26,6 +26,23 @@ const getUser = async (userName) => {
   return response.json();
 };
 
-// TO DO: updateUser function
+//updateUser function
+const updateUser = async (userProfile,userName) => {
+  const response = await fetch(`http://localhost:3001/users/${userName}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userProfile),
+  });
 
-export default { createUser, getUser };
+  const data = await response.json();
+  if (!response.ok) {
+    const errorMessage = data?.message;
+    throw new Error(errorMessage);
+    console.log(errorMessage)
+  }
+  return data;
+};
+
+export default { createUser, getUser,updateUser };

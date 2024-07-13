@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createUserAsync, getUserAsync } from "./thunk";
+import { createUserAsync, getUserAsync,updateUserAsync} from "./thunk";
 
 const REQUEST_STATE = {
   IDLE: "IDLE",
@@ -8,14 +8,15 @@ const REQUEST_STATE = {
   REJECTED: "REJECTED",
 };
 
+
 const INITIAL_STATE = {
   profile: {},
   matchedTherapists: [],
   createUser: REQUEST_STATE.IDLE,
   getUser: REQUEST_STATE.IDLE,
+  updateUser:REQUEST_STATE.IDLE,
   error: null,
 };
-
 export const userSlice = createSlice(
   {
     name: "user",
@@ -50,7 +51,20 @@ export const userSlice = createSlice(
           state.createUser = REQUEST_STATE.REJECTED;
           state.error = action.error;
         })
-        // TO DO: update user cases
+        // update user cases
+        .addCase(updateUserAsync.pending, (state) => {
+          state.updateUser = REQUEST_STATE.PENDING;
+          state.error = null;
+        })
+        .addCase(updateUserAsync.fulfilled, (state, action) => {
+          state.updateUser = REQUEST_STATE.FULFILLED;
+          state.profile = action.payload.profile;
+        })
+        .addCase(updateUserAsync.rejected, (state, action) => {
+          state.updateUser = REQUEST_STATE.REJECTED;
+          state.error = action.error;
+        })
+
     },
   }
 );

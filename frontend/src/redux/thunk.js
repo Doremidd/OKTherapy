@@ -15,10 +15,12 @@ export const createUserAsync = createAsyncThunk(
     }
   );
 
-export const updateUserAsync = createAsyncThunk(
-  actionTypes.UPDATE_USER
-  // TO DO
-);
+  export const updateUserAsync = createAsyncThunk(
+    actionTypes.UPDATE_USER,
+    async ({userProfile,userName}) => {
+      return await UserService.updateUser(userProfile,userName);
+    }
+  );
 
 export const getTherapistAsync = createAsyncThunk(actionTypes.GET_THERAPIST, async (therapistId) => {
   return await TherapistService.getTherapist(therapistId);

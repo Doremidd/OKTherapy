@@ -305,7 +305,7 @@ const TherapyForm = () => {
     e.preventDefault();
     dispatch(createUserAsync({ userProfile: formData, username: user?.sub }));
     console.log("Form submitted:", formData);
-    navigate("/matches");
+    navigate("/profile");
   };
 
   return (
