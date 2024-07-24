@@ -60,8 +60,37 @@ router.put("/:userName", async function (req, res, next) {
 });
 
 // PUT: Assign therapists to a user's assigned therapist db field
-router.put("/:username/therapists", function (req, res, next) {
-  // Algorithm logic
+router.put("/:username/therapists", async function (req, res, next) {
+  const userName = decodeURIComponent(req.params.username);
+  const foundUser = await User.findOne({ userName: userName });
+  
+  if (!foundUser) return res.status(404).send({ message: "User not found" });
+  
+  const matchingCriteria = {
+    location: foundUser.location,
+    fee: { $lte: foundUser.budget[1] },
+    gender: foundUser.therapistGender,
+    approachesUsed: { $in: foundUser.therapyMethods },
+    certification: { $in: foundUser.certification }
+  };
+  
+  if (foundUser.therapyMode === 'Online') {
+    matchingCriteria.onlineAvailability = 'Yes';
+  } 
+  
+  if (foundUser.therapyMode === 'InPerson') {
+    matchingCriteria.inPersonAvailability = 'Yes';
+  }
+  
+  // Get therapists
+  let matchedTherapists = await Therapist.find(matchingCriteria);
+  matchedTherapists = matchedTherapists.slice(0, 5);
+  
+  // Update user profile
+  foundUser.matchedTherapists = matchedTherapists;
+  await foundUser.save();
+  
+  return res.send(foundUser);
 })
 
 module.exports = router;
