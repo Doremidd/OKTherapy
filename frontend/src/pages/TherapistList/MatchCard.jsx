@@ -22,17 +22,20 @@ const MatchCard = ({ therapistId }) => {
   useEffect(() => {
     const fetchTherapist = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/therapists/${therapistId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-        });
+        const response = await fetch(
+          `http://localhost:3001/therapists/${therapistId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const data = await response.json();
         setTherapist(data);
         dispatch(getTherapist(data));
       } catch (error) {
-        console.error('Error getting therapist', error);
+        console.error("Error getting therapist", error);
       }
     };
 
@@ -42,20 +45,27 @@ const MatchCard = ({ therapistId }) => {
   if (!therapist) {
     return <div>Loading...</div>;
   }
-  
+
   return (
     <Accordion allowMultiple>
       <AccordionItem className="accordion">
         <AccordionButton>
           <div className="accordionContent">
             <div className="avatarTextContainer">
-              <Avatar size="xl" src={therapist.image} />
+              <Avatar size="xl" src={therapist?.image} />
               <div className="alignLeft">
                 <Text fontSize="xl" fontWeight="500">
-                  {therapist.name}
+                  {therapist?.name || ""}
                 </Text>
-                <Text>{therapist.location} | {therapist.onlineAvailability === 'Yes' && 'Online ✔️'}</Text>
-                <Text>{therapist.fee ? `$${therapist.fee}/session` : 'Fee not available'}</Text>
+                <Text>
+                  {therapist?.location || ""}
+                  {therapist?.onlineAvailability === "Yes" && " | Online ✔️"}
+                </Text>
+                <Text>
+                  {therapist?.fee
+                    ? `$${therapist?.fee}/session`
+                    : "Fee not available"}
+                </Text>
               </div>
             </div>
             <AccordionIcon />
@@ -64,30 +74,34 @@ const MatchCard = ({ therapistId }) => {
         <AccordionPanel>
           <div className="accordionPanel">
             <Text className="accordionPanelText">
-              Specializes in: {therapist.areaOfPractice.join(', ')}
+              Specializes in: {therapist?.areaOfPractice?.join(", ") || ""}
             </Text>
             <Text className="accordionPanelText">
-              Approaches Used: {therapist.approachesUsed.join(', ')}
+              Approaches Used: {therapist?.approachesUsed?.join(", ") || ""}
             </Text>
             <br></br>
-            <Button
-              size="sm"
-              leftIcon={<LinkIcon />}
-              colorScheme="brand"
-              variant="outline"
-              className="leftButton"
-            >
-              {therapist.website}
-            </Button>
-            <Button
-              size="sm"
-              leftIcon={<PhoneIcon />}
-              colorScheme="brand"
-              variant="outline"
-              className="rightButton"
-            >
-              {therapist.phone}
-            </Button>
+            {therapist?.website && (
+              <Button
+                size="sm"
+                leftIcon={<LinkIcon />}
+                colorScheme="brand"
+                variant="outline"
+                className="leftButton"
+              >
+                {therapist?.website}
+              </Button>
+            )}
+            {therapist?.phone && (
+              <Button
+                size="sm"
+                leftIcon={<PhoneIcon />}
+                colorScheme="brand"
+                variant="outline"
+                className="rightButton"
+              >
+                {therapist.phone}
+              </Button>
+            )}
           </div>
         </AccordionPanel>
       </AccordionItem>

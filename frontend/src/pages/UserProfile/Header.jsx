@@ -12,9 +12,6 @@ export default function Header({ isEditing, onEdit }) {
           <Heading fontWeight="500" fontSize="30px" color="#000000">
             {user?.given_name} {user?.family_name}
           </Heading>
-          <Text fontWeight="400" fontSize="20px" color="#000000">
-            Joined (Date)
-          </Text>
         </Box>
         {!isEditing && (
           <Button ml="30%" colorScheme="teal" size="md" onClick={onEdit}>
