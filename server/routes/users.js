@@ -67,7 +67,6 @@ router.put("/:username/therapists", async function (req, res, next) {
   if (!foundUser) return res.status(404).send({ message: "User not found" });
   
   const matchingCriteria = {
-    location: foundUser.location,
     fee: { $lte: foundUser.budget[1] },
     gender: foundUser.therapistGender,
     approachesUsed: { $in: foundUser.therapyMethods },
