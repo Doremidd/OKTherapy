@@ -69,8 +69,6 @@ router.put("/:username/therapists", async function (req, res, next) {
   const matchingCriteria = {
     fee: { $lte: foundUser.budget[1] },
     gender: foundUser.therapistGender,
-    approachesUsed: { $in: foundUser.therapyMethods },
-    certification: { $in: foundUser.certification }
   };
   
   if (foundUser.therapyMode === 'Online') {
@@ -80,9 +78,47 @@ router.put("/:username/therapists", async function (req, res, next) {
   if (foundUser.therapyMode === 'InPerson') {
     matchingCriteria.inPersonAvailability = 'Yes';
   }
+
+  if (foundUser.therapyMethods && foundUser.therapyMethods.length > 0) {
+    matchingCriteria.approachesUsed = { $in: foundUser.therapyMethods };
+  }
+
+  if (foundUser.certification && foundUser.certification.length > 0) {
+    matchingCriteria.certification = { $in: foundUser.certification };
+  }
   
   // Get therapists
   let matchedTherapists = await Therapist.find(matchingCriteria);
+
+  if (matchedTherapists.length === 0) {
+    const bestRankCriteria = [
+      { location: foundUser.location },
+      { fee: { $lte: foundUser.budget[1] } },
+      { gender: foundUser.therapistGender },
+      { onlineAvailability: foundUser.therapyMode === 'Online' ? 'Yes' : undefined },
+      { inPersonAvailability: foundUser.therapyMode === 'InPerson' ? 'Yes' : undefined },
+    ];
+
+    for (const criteria of bestRankCriteria) {
+      const filteredCriteria = Object.fromEntries(Object.entries(criteria).filter(([_, v]) => v !== undefined));
+      const secondaryMatches = await Therapist.find(filteredCriteria);
+      if (secondaryMatches.length > 0) {
+        matchedTherapists = matchedTherapists.concat(secondaryMatches);
+      }
+    }
+
+    // to remove duplicate therapists
+    //const uniqueTherapists = [];
+    //const therapistNames = new Set();
+    //for (const therapist of matchedTherapists) {
+    //  if (!therapistNames.has(therapist.name)) {
+    //    uniqueTherapists.push(therapist);
+    //    therapistNames.add(therapist.name);
+    //  }
+    //}
+    matchedTherapists = uniqueTherapists;
+  }
+
   matchedTherapists = matchedTherapists.slice(0, 5);
   
   // Update user profile
