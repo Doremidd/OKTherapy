@@ -92,7 +92,6 @@ router.put("/:username/therapists", async function (req, res, next) {
 
   if (matchedTherapists.length === 0) {
     const bestRankCriteria = [
-      { location: foundUser.location },
       { fee: { $lte: foundUser.budget[1] } },
       { gender: foundUser.therapistGender },
       { onlineAvailability: foundUser.therapyMode === 'Online' ? 'Yes' : undefined },
