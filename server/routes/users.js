@@ -101,7 +101,7 @@ router.put("/:username/therapists", async function (req, res, next) {
 
     for (const criteria of bestRankCriteria) {
       const filteredCriteria = Object.fromEntries(Object.entries(criteria).filter(([_, v]) => v !== undefined));
-      const secondaryMatches = await Therapist.find(filteredCriteria);
+      let secondaryMatches = await Therapist.find(filteredCriteria);
       if (secondaryMatches.length > 0) {
         matchedTherapists = matchedTherapists.concat(secondaryMatches);
       }
