@@ -1,0 +1,10 @@
+.alignLeft {
+    text-align: left;
+}
+
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 36px;
+}
