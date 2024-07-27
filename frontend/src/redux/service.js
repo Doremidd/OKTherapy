@@ -3,7 +3,7 @@ const createUser = async (userProfile, username) => {
     ...userProfile,
     userName: username,
   };
-  const response = await fetch("https://project-24-oktherapy.onrender.com/users", {
+  const response = await fetch(`https://project-24-oktherapy.onrender.com/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

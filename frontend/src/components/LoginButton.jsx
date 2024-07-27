@@ -9,13 +9,13 @@ const LoginButton = () => {
     </Button>
   ) : (
     <Button
-      colorScheme="brand"
-      onClick={() =>
-        loginWithRedirect({ redirectUri: " https://project-24-oktherapy.onrender.com/form" })
-      }
-    >
-      Login
-    </Button>
+    colorScheme="brand"
+    onClick={() =>
+      loginWithRedirect({ redirectUri: "https://project-24-oktherapy.onrender.com/form" })
+    }
+  >
+    Login
+  </Button>
   );
 };
 
