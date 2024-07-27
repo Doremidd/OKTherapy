@@ -1,4 +1,5 @@
 # Group 24 - Therapy Connections
+![example workflow](https://github.com/ubc-cpsc455-2024S/project-24_OkTherapy/actions/workflows/ci.yml/badge.svg)
 
 ## App description
 
