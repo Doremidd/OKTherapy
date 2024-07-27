@@ -15,7 +15,6 @@ const Home = () => {
     const fetchUserProfile = async () => {
       if (user?.sub) {
         const result = await dispatch(getUserAsync(user.sub));
-        console.log(result);
         if (result?.payload && result?.payload?.message != "User not found") {
           setPage("matches");
         }

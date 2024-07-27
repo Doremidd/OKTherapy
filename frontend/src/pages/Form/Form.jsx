@@ -13,7 +13,6 @@ import {
   CheckboxGroup,
   Checkbox,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import BudgetSlider from "../../components/BudgetSlider";
 import {
   certification,
@@ -44,7 +43,26 @@ const TherapyForm = () => {
     therapyMethods: [],
     certification: [],
   });
-  const navigate = useNavigate();
+
+  const updateUserProfile = async (id) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}/therapists`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        console.log("Matches generated!")
+      } else {
+        const errorData = await response.json();
+        console.error(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error(`Error: ${error.message}`);
+    }
+  };
 
   const isOtherGender =
     !genders.includes(formData.gender) && formData.gender !== "";
@@ -283,10 +301,10 @@ const TherapyForm = () => {
         </FormControl>
       ),
     },
-    {
-      label: "Filler",
-      component: <></>,
-    },
+    // {
+    //   label: "Filler",
+    //   component: <></>,
+    // },
   ];
 
   const handleNext = () => {
@@ -301,11 +319,16 @@ const TherapyForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    dispatch(createUserAsync({ userProfile: formData, username: user?.sub }));
-    console.log("Form submitted:", formData);
-    navigate("/profile");
+    try {
+      await dispatch(createUserAsync({ userProfile: formData, username: user?.sub }));
+      await updateUserProfile(user?.sub);
+      console.log("Form submitted:", formData);
+    } catch(error) {
+      console.error(error);
+    }
+    window.location.reload()
   };
 
   return (
