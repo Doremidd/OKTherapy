@@ -34,7 +34,7 @@ const TherapistList = () => {
         <br />
         Ready for the next step? Check out{" "}
         <span style={{ color: "#819792", fontWeight: "600" }}>
-          <a href="http://localhost:5173/email-generator">
+          <a href="/email-generator">
             OkTherapy&apos;s email generation tool{" "}
           </a>
         </span>

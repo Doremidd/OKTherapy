@@ -110,7 +110,7 @@ export const generateAITemplate = async (userProfile, user) => {
   const prompt = createAIPrompt(userProfile);
 
   try {
-    const response = await fetch("http://localhost:3001/generate", {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/generate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
