@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch } from "react-redux";
 import { getUserAsync } from "../../redux/thunk";
-import { generateTemplate } from "./generateTemplates";
+import { generateAITemplate, generateTemplate1, generateTemplate2 } from "./generateTemplates";
+
 
 const EmailGenerator = () => {
   const dispatch = useDispatch();
@@ -13,11 +14,42 @@ const EmailGenerator = () => {
   const textareaRef = useRef(null);
   const [textAreaValue, setTextAreaValue] = useState("");
   const { user } = useAuth0();
+  const [aiTemplate, setAiTemplate] = useState("");
+
+  const generateTemplate = (template, userProfile, user) => {
+    if (user && userProfile) {
+      switch (template) {
+        case 0:
+          return generateTemplate1(userProfile, user);
+        case 1:
+          return generateTemplate2(userProfile, user);
+        default:
+          return aiTemplate;
+      }
+    }
+  };
 
   useEffect(() => {
+    const createAiTemplate = async () => {
+      setAiTemplate(await generateAITemplate(profile, user));
+    };
     if (profile && user) {
-      setTextAreaValue(generateTemplate(selectedTemplate, profile, user));
+      createAiTemplate();
     }
+  }, [profile, user]);
+
+  useEffect(() => {
+    const generateAndSetTemplate = async () => {
+      if (profile && user) {
+        const template = generateTemplate(
+          selectedTemplate,
+          profile,
+          user
+        );
+        setTextAreaValue(template);
+      }
+    };
+    generateAndSetTemplate();
   }, [selectedTemplate, profile, user]);
 
   useEffect(() => {
@@ -35,21 +67,21 @@ const EmailGenerator = () => {
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = "auto"; // Reset height
-      textarea.style.height = `${textarea.scrollHeight}px`; // Set new height based on content
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
 
   useEffect(() => {
-    adjustTextareaHeight(); // Adjust height whenever textAreaValue changes
+    adjustTextareaHeight();
   }, [textAreaValue]);
 
-  useEffect(() => {
-    adjustTextareaHeight(); // Adjust height on initial load
-  }, []);
-
   const copyContent = () => {
-    navigator.clipboard.writeText(textAreaValue).catch((err) => {
+    navigator.clipboard.writeText(textAreaValue)
+    .then(() => {
+      alert("Email template copied to clipboard")
+    })
+    .catch((err) => {
       console.error("Failed to copy text: ", err);
     });
   };
