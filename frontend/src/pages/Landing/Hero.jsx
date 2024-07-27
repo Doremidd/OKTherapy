@@ -48,7 +48,7 @@ const Hero = () => {
               lineHeight="28px"
               _hover={{ bg: "#55695E" }}
               onClick={() =>
-                loginWithRedirect({ redirectUri: `${import.meta.env.VITE_CLIENT_URL}/home` })
+                loginWithRedirect({ redirectUri: `${window.location.origin}/home` })
               }
             >
               Get Started
