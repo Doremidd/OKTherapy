@@ -9,6 +9,7 @@ const port = 3001;
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var therapistRouter = require("./routes/therapists");
+var generateRouter = require("./routes/generate");
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, "../frontend/dist")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/therapists", therapistRouter);
+app.use("/generate", generateRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "../frontend/dist/index.html"));
