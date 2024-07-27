@@ -20,7 +20,17 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: Install directory dependencies
         run: |
-          cd backend
           npm install
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      # Uncomment when email feature is merged in
+      # - name: Install backend dependencies
+      #   run: |
+      #     cd server
+      #     npm install
