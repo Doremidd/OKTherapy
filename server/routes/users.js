@@ -3,6 +3,8 @@ var router = express.Router();
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/userModel");
+const Therapist = require("../models/therapistModel");
+
 
 
 // GET a specific user
@@ -79,12 +81,12 @@ router.put("/:username/therapists", async function (req, res, next) {
     matchingCriteria.inPersonAvailability = 'Yes';
   }
 
-  if (foundUser.therapyMethods && foundUser.therapyMethods.length > 0) {
-    matchingCriteria.approachesUsed = { $in: foundUser.therapyMethods };
-  }
-
+  //if (foundUser.therapyMethods && foundUser.therapyMethods.length > 0) {
+  //  matchingCriteria.approachesUsed = { $in: foundUser.therapyMethods };
+  //}
   if (foundUser.certification && foundUser.certification.length > 0) {
-    matchingCriteria.certification = { $in: foundUser.certification };
+    let trimmedCertification = foundUser.certification.map(s => s.split(":")[0]);
+    matchingCriteria.certification = { $in: trimmedCertification };
   }
   
   // Get therapists
@@ -115,7 +117,7 @@ router.put("/:username/therapists", async function (req, res, next) {
     //    therapistNames.add(therapist.name);
     //  }
     //}
-    matchedTherapists = uniqueTherapists;
+    //matchedTherapists = uniqueTherapists;
   }
 
   matchedTherapists = matchedTherapists.slice(0, 5);
