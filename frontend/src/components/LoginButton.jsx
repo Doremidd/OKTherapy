@@ -11,7 +11,7 @@ const LoginButton = () => {
     <Button
       colorScheme="brand"
       onClick={() =>
-        loginWithRedirect({ redirectUri: "http://localhost:5173/form" })
+        loginWithRedirect({ redirectUri: " https://project-24-oktherapy.onrender.com/form" })
       }
     >
       Login
