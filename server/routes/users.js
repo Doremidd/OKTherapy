@@ -3,6 +3,8 @@ var router = express.Router();
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/userModel");
+const Therapist = require("../models/therapistModel");
+
 
 
 // GET a specific user
@@ -60,8 +62,71 @@ router.put("/:userName", async function (req, res, next) {
 });
 
 // PUT: Assign therapists to a user's assigned therapist db field
-router.put("/:username/therapists", function (req, res, next) {
-  // Algorithm logic
+router.put("/:username/therapists", async function (req, res, next) {
+  const userName = decodeURIComponent(req.params.username);
+  const foundUser = await User.findOne({ userName: userName });
+  
+  if (!foundUser) return res.status(404).send({ message: "User not found" });
+  
+  const matchingCriteria = {
+    fee: { $lte: foundUser.budget[1] },
+    gender: foundUser.therapistGender,
+  };
+  
+  if (foundUser.therapyMode === 'Online') {
+    matchingCriteria.onlineAvailability = 'Yes';
+  } 
+  
+  if (foundUser.therapyMode === 'InPerson') {
+    matchingCriteria.inPersonAvailability = 'Yes';
+  }
+
+  //if (foundUser.therapyMethods && foundUser.therapyMethods.length > 0) {
+  //  matchingCriteria.approachesUsed = { $in: foundUser.therapyMethods };
+  //}
+  if (foundUser.certification && foundUser.certification.length > 0) {
+    let trimmedCertification = foundUser.certification.map(s => s.split(":")[0]);
+    matchingCriteria.certification = { $in: trimmedCertification };
+  }
+  
+  // Get therapists
+  let matchedTherapists = await Therapist.find(matchingCriteria);
+
+  if (matchedTherapists.length === 0) {
+    const bestRankCriteria = [
+      { fee: { $lte: foundUser.budget[1] } },
+      { gender: foundUser.therapistGender },
+      { onlineAvailability: foundUser.therapyMode === 'Online' ? 'Yes' : undefined },
+      { inPersonAvailability: foundUser.therapyMode === 'InPerson' ? 'Yes' : undefined },
+    ];
+
+    for (const criteria of bestRankCriteria) {
+      const filteredCriteria = Object.fromEntries(Object.entries(criteria).filter(([_, v]) => v !== undefined));
+      let secondaryMatches = await Therapist.find(filteredCriteria);
+      if (secondaryMatches.length > 0) {
+        matchedTherapists = matchedTherapists.concat(secondaryMatches);
+      }
+    }
+
+    // to remove duplicate therapists
+    //const uniqueTherapists = [];
+    //const therapistNames = new Set();
+    //for (const therapist of matchedTherapists) {
+    //  if (!therapistNames.has(therapist.name)) {
+    //    uniqueTherapists.push(therapist);
+    //    therapistNames.add(therapist.name);
+    //  }
+    //}
+    //matchedTherapists = uniqueTherapists;
+  }
+
+  matchedTherapists = matchedTherapists.slice(0, 5);
+  
+  // Update user profile
+  foundUser.matchedTherapists = matchedTherapists;
+  await foundUser.save();
+  
+  return res.send(foundUser);
 })
 
 module.exports = router;
