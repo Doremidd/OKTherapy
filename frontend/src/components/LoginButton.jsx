@@ -11,7 +11,7 @@ const LoginButton = () => {
     <Button
       colorScheme="brand"
       onClick={() =>
-        loginWithRedirect({ redirectUri: "http://localhost:5173/form" })
+        loginWithRedirect({ redirectUri: `${import.meta.env.VITE_CLIENT_URL}/home` })
       }
     >
       Login

@@ -18,7 +18,11 @@ const NavBar = () => {
   const { logout } = useAuth0();
 
   const handleLogoClick = () => {
-    window.location.href = "/matches";
+    if (location.pathname == "/") {
+      window.location.href = "/";
+    } else {
+      window.location.href = "/home";
+    }
   };
 
   return (
@@ -26,8 +30,15 @@ const NavBar = () => {
       className="navbar"
       style={{ background: location.pathname == "/" ? "#F0ECF7" : "none" }}
     >
-      <Button onClick={handleLogoClick} style={{ border: "none", background: "none", padding: 0 }}>
-        <img src="/assets/OKTherapy.png" alt="Logo" style={{ height: 20, cursor: "pointer" }} />
+      <Button
+        onClick={handleLogoClick}
+        style={{ border: "none", background: "none", padding: 0 }}
+      >
+        <img
+          src="/assets/OKTherapy.png"
+          alt="Logo"
+          style={{ height: 20, cursor: "pointer" }}
+        />
       </Button>
       {location.pathname == "/" ? (
         <LoginButton />
