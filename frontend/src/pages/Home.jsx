@@ -5,20 +5,20 @@ import { useEffect, useState } from "react";
 import TherapistList from "./TherapistList/TherapistList";
 import TherapyForm from "./Form/Form";
 import { Flex, Spinner } from "@chakra-ui/react";
-import { setUser } from "../redux/reducer";
+import { setAuth0User } from "../redux/reducer";
 import { useSelector } from "react-redux";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { isLoading, isAuthenticated, user } = useAuth0();
   const [page, setPage] = useState("form");
-  const auth0User = useSelector((state) => state.user.user);
+  const auth0User = useSelector((state) => state.user.auth0User);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user?.sub) {
         if (!auth0User) {
-          dispatch(setUser(user));
+          dispatch(setAuth0User(user));
         }
         const sub = auth0User?.sub || user.sub;
         const result = await dispatch(getUserAsync(sub));

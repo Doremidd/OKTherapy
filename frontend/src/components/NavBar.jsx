@@ -5,20 +5,10 @@ import { Avatar, MenuButton, Menu, MenuList, MenuItem } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Button } from "@chakra-ui/react";
 
 const NavBar = () => {
   let location = useLocation();
-
   const { logout } = useAuth0();
-
-  const handleLogoClick = () => {
-    if (location.pathname == "/") {
-      window.location.href = "/";
-    } else {
-      window.location.href = "/home";
-    }
-  };
 
   return (
     <div

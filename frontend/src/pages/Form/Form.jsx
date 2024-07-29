@@ -26,9 +26,10 @@ import {
 import { useDispatch } from "react-redux";
 import { createUserAsync } from "../../redux/thunk";
 import { useSelector } from "react-redux";
+import { updateUserProfile } from "../../util/updateUserProfile";
 
 const TherapyForm = () => {
-  const auth0User = useSelector((state) => state.user.user);
+  const auth0User = useSelector((state) => state.user.auth0User);
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
@@ -43,26 +44,6 @@ const TherapyForm = () => {
     therapyMethods: [],
     certification: [],
   });
-
-  const updateUserProfile = async (id) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}/therapists`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        console.log("Matches generated!")
-      } else {
-        const errorData = await response.json();
-        console.error(`Error: ${errorData.message}`);
-      }
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-    }
-  };
 
   const isOtherGender =
     !genders.includes(formData.gender) && formData.gender !== "";

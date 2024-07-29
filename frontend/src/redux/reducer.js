@@ -10,7 +10,7 @@ const REQUEST_STATE = {
 
 
 const INITIAL_STATE = {
-  user: null,
+  auth0User: null,
   profile: {},
   matchedTherapists: [],
   createUser: REQUEST_STATE.IDLE,
@@ -23,8 +23,8 @@ export const userSlice = createSlice(
     name: "user",
     initialState: INITIAL_STATE,
     reducers: {
-      setUser: (state, action) => {
-        state.user = action.payload;
+      setAuth0User: (state, action) => {
+        state.auth0User = action.payload;
       },
     },
     extraReducers: (builder) => {
@@ -73,5 +73,5 @@ export const userSlice = createSlice(
     },
   }
 );
-export const { setUser } = userSlice.actions;
+export const { setAuth0User } = userSlice.actions;
 export default userSlice.reducer;

@@ -3,9 +3,12 @@ import "./style.css";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getUserAsync } from "../../redux/thunk";
-import { generateAITemplate, generateTemplate1, generateTemplate2 } from "./generateTemplates";
+import {
+  generateAITemplate,
+  generateTemplate1,
+  generateTemplate2,
+} from "./generateTemplates";
 import { useSelector } from "react-redux";
-
 
 const EmailGenerator = () => {
   const dispatch = useDispatch();
@@ -13,7 +16,7 @@ const EmailGenerator = () => {
   const [profile, setProfile] = useState();
   const textareaRef = useRef(null);
   const [textAreaValue, setTextAreaValue] = useState("");
-  const auth0User = useSelector((state) => state.user.user);
+  const auth0User = useSelector((state) => state.user.auth0User);
   const [aiTemplate, setAiTemplate] = useState("");
 
   const generateTemplate = (template, userProfile, auth0User) => {
@@ -29,6 +32,14 @@ const EmailGenerator = () => {
     }
   };
 
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
+
   useEffect(() => {
     const createAiTemplate = async () => {
       setAiTemplate(await generateAITemplate(profile, auth0User));
@@ -40,17 +51,13 @@ const EmailGenerator = () => {
 
   useEffect(() => {
     const generateAndSetTemplate = async () => {
-      if (profile && auth0User) {
-        const template = generateTemplate(
-          selectedTemplate,
-          profile,
-          auth0User
-        );
-        setTextAreaValue(template);
-      }
+      const template = generateTemplate(selectedTemplate, profile, auth0User);
+      setTextAreaValue(template);
     };
-    generateAndSetTemplate();
-  }, [selectedTemplate, profile, auth0User]);
+    if (profile && auth0User) {
+      generateAndSetTemplate();
+    }
+  }, [selectedTemplate, profile, auth0User, aiTemplate]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -64,26 +71,19 @@ const EmailGenerator = () => {
     fetchUserProfile();
   }, [dispatch, auth0User]);
 
-  const adjustTextareaHeight = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  };
-
   useEffect(() => {
     adjustTextareaHeight();
   }, [textAreaValue]);
 
   const copyContent = () => {
-    navigator.clipboard.writeText(textAreaValue)
-    .then(() => {
-      alert("Email template copied to clipboard")
-    })
-    .catch((err) => {
-      console.error("Failed to copy text: ", err);
-    });
+    navigator.clipboard
+      .writeText(textAreaValue)
+      .then(() => {
+        alert("Email template copied to clipboard");
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
   };
 
   return (

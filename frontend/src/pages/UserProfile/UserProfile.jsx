@@ -28,12 +28,13 @@ import {
 } from "../../constants/formOptions";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserAsync, updateUserAsync } from "../../redux/thunk";
+import { updateUserProfile } from "../../util/updateUserProfile";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const value = useSelector((state) => state.user.profile);
-  const auth0User = useSelector((state) => state.user.user);
+  const auth0User = useSelector((state) => state.user.auth0User);
 
   const [profileValues, setProfileValues] = useState({
     ...value,
@@ -68,27 +69,6 @@ const UserProfile = () => {
   const handleCancel = () => {
     setIsEditing(false);
     setProfileValues(value);
-  };
-
-  const updateUserProfile = async (id) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/users/${id}/therapists`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error(`Error: ${errorData.message}`);
-      }
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-    }
   };
 
   const handleSave = async () => {
