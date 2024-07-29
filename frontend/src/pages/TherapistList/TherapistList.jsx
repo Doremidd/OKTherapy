@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getUserAsync } from "../../redux/thunk";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const TherapistList = () => {
   const dispatch = useDispatch();
@@ -34,9 +35,9 @@ const TherapistList = () => {
         <br />
         Ready for the next step? Check out{" "}
         <span style={{ color: "#819792", fontWeight: "600" }}>
-          <a href="/email-generator">
+          <Link to="/email-generator">
             OkTherapy&apos;s email generation tool{" "}
-          </a>
+          </Link>
         </span>
         to quickly reach out to your therapist matches.
       </Text>

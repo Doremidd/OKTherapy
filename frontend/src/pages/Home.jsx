@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import TherapistList from "./TherapistList/TherapistList";
 import TherapyForm from "./Form/Form";
 import { Flex, Spinner } from "@chakra-ui/react";
+import { setUser } from "../redux/reducer";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -14,13 +15,16 @@ const Home = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user?.sub) {
+        dispatch(setUser(user));
         const result = await dispatch(getUserAsync(user.sub));
         if (result?.payload && result?.payload?.message != "User not found") {
           setPage("matches");
         }
       }
     };
-    fetchUserProfile();
+    if (!isLoading && isAuthenticated && user) {
+      fetchUserProfile();
+    }
   }, [dispatch, user, isLoading, isAuthenticated, error]);
 
   return (
