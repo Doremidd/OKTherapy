@@ -6,8 +6,21 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import Footer from "./components/Footer";
 import EmailGenerator from "./pages/EmailGenerator/EmailGenerator";
 import Home from "./pages/Home";
+import { useDispatch } from "react-redux";
+import { setUser } from "./redux/reducer";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 function App() {
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && user) {
+      dispatch(setUser(user));
+    }
+  }, [isLoading, isAuthenticated, user, dispatch]);
+  
   return (
     <Router>
       <NavBar />

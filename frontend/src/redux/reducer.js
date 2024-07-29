@@ -10,6 +10,7 @@ const REQUEST_STATE = {
 
 
 const INITIAL_STATE = {
+  user: null,
   profile: {},
   matchedTherapists: [],
   createUser: REQUEST_STATE.IDLE,
@@ -21,7 +22,11 @@ export const userSlice = createSlice(
   {
     name: "user",
     initialState: INITIAL_STATE,
-    reducers: {},
+    reducers: {
+      setUser: (state, action) => {
+        state.user = action.payload;
+      },
+    },
     extraReducers: (builder) => {
       builder
         // get user / GET
@@ -68,4 +73,5 @@ export const userSlice = createSlice(
     },
   }
 );
+export const { setUser } = userSlice.actions;
 export default userSlice.reducer;

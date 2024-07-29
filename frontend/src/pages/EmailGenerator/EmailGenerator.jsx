@@ -1,10 +1,10 @@
 import { Container, Text, Button } from "@chakra-ui/react";
 import "./style.css";
 import { useState, useRef, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch } from "react-redux";
 import { getUserAsync } from "../../redux/thunk";
 import { generateAITemplate, generateTemplate1, generateTemplate2 } from "./generateTemplates";
+import { useSelector } from "react-redux";
 
 
 const EmailGenerator = () => {
@@ -13,16 +13,16 @@ const EmailGenerator = () => {
   const [profile, setProfile] = useState();
   const textareaRef = useRef(null);
   const [textAreaValue, setTextAreaValue] = useState("");
-  const { user } = useAuth0();
+  const auth0User = useSelector((state) => state.user.user);
   const [aiTemplate, setAiTemplate] = useState("");
 
-  const generateTemplate = (template, userProfile, user) => {
-    if (user && userProfile) {
+  const generateTemplate = (template, userProfile, auth0User) => {
+    if (auth0User && userProfile) {
       switch (template) {
         case 0:
-          return generateTemplate1(userProfile, user);
+          return generateTemplate1(userProfile, auth0User);
         case 1:
-          return generateTemplate2(userProfile, user);
+          return generateTemplate2(userProfile, auth0User);
         default:
           return aiTemplate;
       }
@@ -31,38 +31,38 @@ const EmailGenerator = () => {
 
   useEffect(() => {
     const createAiTemplate = async () => {
-      setAiTemplate(await generateAITemplate(profile, user));
+      setAiTemplate(await generateAITemplate(profile, auth0User));
     };
-    if (profile && user) {
+    if (profile && auth0User) {
       createAiTemplate();
     }
-  }, [profile, user]);
+  }, [profile, auth0User]);
 
   useEffect(() => {
     const generateAndSetTemplate = async () => {
-      if (profile && user) {
+      if (profile && auth0User) {
         const template = generateTemplate(
           selectedTemplate,
           profile,
-          user
+          auth0User
         );
         setTextAreaValue(template);
       }
     };
     generateAndSetTemplate();
-  }, [selectedTemplate, profile, user]);
+  }, [selectedTemplate, profile, auth0User]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (user?.sub) {
-        const result = await dispatch(getUserAsync(user.sub));
+      if (auth0User?.sub) {
+        const result = await dispatch(getUserAsync(auth0User.sub));
         if (result?.payload) {
           setProfile(result.payload.profile);
         }
       }
     };
     fetchUserProfile();
-  }, [dispatch, user]);
+  }, [dispatch, auth0User]);
 
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;

@@ -25,10 +25,10 @@ import {
 } from "../../constants/formOptions";
 import { useDispatch } from "react-redux";
 import { createUserAsync } from "../../redux/thunk";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector } from "react-redux";
 
 const TherapyForm = () => {
-  const { user } = useAuth0();
+  const auth0User = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
@@ -322,8 +322,8 @@ const TherapyForm = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-      await dispatch(createUserAsync({ userProfile: formData, username: user?.sub }));
-      await updateUserProfile(user?.sub);
+      await dispatch(createUserAsync({ userProfile: formData, username: auth0User?.sub }));
+      await updateUserProfile(auth0User?.sub);
       console.log("Form submitted:", formData);
     } catch(error) {
       console.error(error);

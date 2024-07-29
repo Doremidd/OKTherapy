@@ -28,12 +28,13 @@ import {
 } from "../../constants/formOptions";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserAsync, updateUserAsync } from "../../redux/thunk";
-import { useAuth0 } from "@auth0/auth0-react";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const value = useSelector((state) => state.user.profile);
+  const auth0User = useSelector((state) => state.user.user);
+
   const [profileValues, setProfileValues] = useState({
     ...value,
     budget: value?.budget || [100, 300],
@@ -47,26 +48,18 @@ const UserProfile = () => {
     therapyMethods: value?.therapyMethods || [],
     certification: value?.certification || [],
   });
-  const { user } = useAuth0();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (user?.sub) {
-        const result = await dispatch(getUserAsync(user.sub));
+      if (auth0User?.sub) {
+        const result = await dispatch(getUserAsync(auth0User.sub));
         if (result?.payload) {
           setProfileValues(result.payload.profile);
         }
       }
     };
     fetchUserProfile();
-  }, [dispatch, user]);
-
-  // useEffect(async() => {
-  //   if(user?.sub){
-  //   await dispatch(getUserAsync(user.sub));
-  //   setProfileValues(value);
-  //   }
-  // },[dispatch,user])
+  }, [dispatch, auth0User]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -101,9 +94,9 @@ const UserProfile = () => {
   const handleSave = async () => {
     setIsEditing(false);
     await dispatch(
-      updateUserAsync({ userProfile: profileValues, userName: user?.sub })
+      updateUserAsync({ userProfile: profileValues, userName: auth0User?.sub })
     );
-    await updateUserProfile(user?.sub);
+    await updateUserProfile(auth0User?.sub);
   };
 
   const handleCheckboxChange = (category, item, checked) => {
