@@ -6,26 +6,32 @@ import TherapistList from "./TherapistList/TherapistList";
 import TherapyForm from "./Form/Form";
 import { Flex, Spinner } from "@chakra-ui/react";
 import { setUser } from "../redux/reducer";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { isLoading, isAuthenticated, error, user } = useAuth0();
+  const { isLoading, isAuthenticated, user } = useAuth0();
   const [page, setPage] = useState("form");
+  const auth0User = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user?.sub) {
-        dispatch(setUser(user));
-        const result = await dispatch(getUserAsync(user.sub));
-        if (result?.payload && result?.payload?.message != "User not found") {
+        if (!auth0User) {
+          dispatch(setUser(user));
+        }
+        const sub = auth0User?.sub || user.sub;
+        const result = await dispatch(getUserAsync(sub));
+        if (result?.payload?.message !== "User not found") {
           setPage("matches");
         }
       }
     };
+
     if (!isLoading && isAuthenticated && user) {
       fetchUserProfile();
     }
-  }, [dispatch, user, isLoading, isAuthenticated, error]);
+  }, [dispatch, user, isLoading, isAuthenticated, auth0User]);
 
   return (
     <>
