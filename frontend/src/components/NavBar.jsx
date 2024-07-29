@@ -25,16 +25,13 @@ const NavBar = () => {
       className="navbar"
       style={{ background: location.pathname == "/" ? "#F0ECF7" : "none" }}
     >
-      <Button
-        onClick={handleLogoClick}
-        style={{ border: "none", background: "none", padding: 0 }}
-      >
+      <Link to={location.pathname === "/" ? "/" : "/home"}>
         <img
           src="/assets/OKTherapy.png"
           alt="Logo"
           style={{ height: 20, cursor: "pointer" }}
         />
-      </Button>
+      </Link>
       {location.pathname == "/" ? (
         <LoginButton />
       ) : (
