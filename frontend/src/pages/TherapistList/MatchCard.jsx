@@ -74,6 +74,9 @@ const MatchCard = ({ therapistId }) => {
         <AccordionPanel>
           <div className="accordionPanel">
             <Text className="accordionPanelText">
+              Description: {therapist?.description || "No description available"}
+            </Text>
+            <Text className="accordionPanelText">
               Specializes in: {therapist?.areaOfPractice?.join(", ") || ""}
             </Text>
             <Text className="accordionPanelText">
@@ -87,8 +90,9 @@ const MatchCard = ({ therapistId }) => {
                 colorScheme="brand"
                 variant="outline"
                 className="leftButton"
+                onClick={() => window.open(therapist?.website, "_blank")}
               >
-                {therapist?.website}
+                Therapist&apos;s website
               </Button>
             )}
             {therapist?.phone && (
@@ -97,9 +101,21 @@ const MatchCard = ({ therapistId }) => {
                 leftIcon={<PhoneIcon />}
                 colorScheme="brand"
                 variant="outline"
-                className="rightButton"
+                className="middleButton"
               >
                 {therapist.phone}
+              </Button>
+            )}
+            {therapist?.contactFormUrl && (
+              <Button
+                size="sm"
+                leftIcon={<LinkIcon />}
+                colorScheme="brand"
+                variant="outline"
+                className="rightButton"
+                onClick={() => window.open(therapist.contactFormUrl, "_blank")}
+              >
+                Contact therapist
               </Button>
             )}
           </div>
