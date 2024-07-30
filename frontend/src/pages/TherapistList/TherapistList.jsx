@@ -4,7 +4,8 @@ import MatchCard from "./MatchCard";
 import "./style.css";
 import { getUserAsync } from "../../redux/thunk";
 import { useDispatch } from "react-redux";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const TherapistList = () => {
   const dispatch = useDispatch();
