@@ -1,27 +1,26 @@
+import { useEffect, useState } from "react";
 import { Container, Text } from "@chakra-ui/react";
 import MatchCard from "./MatchCard";
 import "./style.css";
-import { useDispatch } from "react-redux";
 import { getUserAsync } from "../../redux/thunk";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const TherapistList = () => {
   const dispatch = useDispatch();
-  const [matches, setMatches] = useState([]);
+  const [therapists, setTherapists] = useState([]);
   const auth0User = useSelector((state) => state.user.auth0User);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchUserMatches = async () => {
       if (auth0User?.sub) {
         const result = await dispatch(getUserAsync(auth0User.sub));
         if (result?.payload) {
-          setMatches(result.payload.matchedTherapists);
+          setTherapists(result.payload.matchedTherapists);
         }
       }
     };
-    fetchUserProfile();
+    fetchUserMatches();
   }, [dispatch, auth0User]);
 
   return (
@@ -41,9 +40,13 @@ const TherapistList = () => {
         </span>
         to quickly reach out to your therapist matches.
       </Text>
-      {matches.map((match) => (
-        <MatchCard key={match._id} therapistId={match._id} />
-      ))}
+      {therapists.length > 0 ? (
+        therapists.map((therapist) => (
+          <MatchCard key={therapist._id} therapistId={therapist._id} />
+        ))
+      ) : (
+        <Text>No matches found.</Text>
+      )}
     </Container>
   );
 };
