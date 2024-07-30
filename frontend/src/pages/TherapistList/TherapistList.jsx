@@ -1,28 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { Container, Text } from "@chakra-ui/react";
 import MatchCard from "./MatchCard";
 import "./style.css";
 import { getUserAsync } from "../../redux/thunk";
 import { useDispatch } from "react-redux";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const TherapistList = () => {
   const dispatch = useDispatch();
   const [therapists, setTherapists] = useState([]);
-
-  const { user } = useAuth0();
+  const auth0User = useSelector((state) => state.user.auth0User);
 
   useEffect(() => {
     const fetchUserMatches = async () => {
-      if (user?.sub) {
-        const result = await dispatch(getUserAsync(user.sub));
+      if (auth0User?.sub) {
+        const result = await dispatch(getUserAsync(auth0User.sub));
         if (result?.payload) {
           setTherapists(result.payload.matchedTherapists);
         }
       }
     };
     fetchUserMatches();
-  }, [dispatch, user]);
+  }, [dispatch, auth0User]);
 
   return (
     <Container maxW="80%" className="mainContainer">
@@ -35,15 +35,15 @@ const TherapistList = () => {
         <br />
         Ready for the next step? Check out{" "}
         <span style={{ color: "#819792", fontWeight: "600" }}>
-          <a href="http://localhost:5173/email-generator">
+          <Link to="/email-generator">
             OkTherapy&apos;s email generation tool{" "}
-          </a>
+          </Link>
         </span>
         to quickly reach out to your therapist matches.
       </Text>
       {therapists.length > 0 ? (
-        therapists.slice(0, 5).map((therapistId) => (
-          <MatchCard key={therapistId} therapistId={therapistId} />
+        therapists.map((therapist) => (
+          <MatchCard key={therapist._id} therapistId={therapist._id} />
         ))
       ) : (
         <Text>No matches found.</Text>

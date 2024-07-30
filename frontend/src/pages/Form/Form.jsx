@@ -13,7 +13,6 @@ import {
   CheckboxGroup,
   Checkbox,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import BudgetSlider from "../../components/BudgetSlider";
 import {
   certification,
@@ -26,10 +25,11 @@ import {
 } from "../../constants/formOptions";
 import { useDispatch } from "react-redux";
 import { createUserAsync } from "../../redux/thunk";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector } from "react-redux";
+import { updateUserProfile } from "../../util/updateUserProfile";
 
 const TherapyForm = () => {
-  const { user } = useAuth0();
+  const auth0User = useSelector((state) => state.user.auth0User);
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
@@ -44,7 +44,6 @@ const TherapyForm = () => {
     therapyMethods: [],
     certification: [],
   });
-  const navigate = useNavigate();
 
   const isOtherGender =
     !genders.includes(formData.gender) && formData.gender !== "";
@@ -283,10 +282,10 @@ const TherapyForm = () => {
         </FormControl>
       ),
     },
-    {
-      label: "Filler",
-      component: <></>,
-    },
+    // {
+    //   label: "Filler",
+    //   component: <></>,
+    // },
   ];
 
   const handleNext = () => {
@@ -301,11 +300,16 @@ const TherapyForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    dispatch(createUserAsync({ userProfile: formData, username: user?.sub }));
-    console.log("Form submitted:", formData);
-    navigate("/profile");
+    try {
+      await dispatch(createUserAsync({ userProfile: formData, username: auth0User?.sub }));
+      await updateUserProfile(auth0User?.sub);
+      console.log("Form submitted:", formData);
+    } catch(error) {
+      console.error(error);
+    }
+    window.location.reload()
   };
 
   return (

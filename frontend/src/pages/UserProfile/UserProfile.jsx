@@ -27,13 +27,15 @@ import {
   certification,
 } from "../../constants/formOptions";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserAsync,updateUserAsync } from "../../redux/thunk";
-import { useAuth0 } from "@auth0/auth0-react";
+import { getUserAsync, updateUserAsync } from "../../redux/thunk";
+import { updateUserProfile } from "../../util/updateUserProfile";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const value = useSelector((state) => state.user.profile);
+  const auth0User = useSelector((state) => state.user.auth0User);
+
   const [profileValues, setProfileValues] = useState({
     ...value,
     budget: value?.budget || [100, 300],
@@ -47,28 +49,18 @@ const UserProfile = () => {
     therapyMethods: value?.therapyMethods || [],
     certification: value?.certification || [],
   });
-  const { user } = useAuth0();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (user?.sub) {
-        const result = await dispatch(getUserAsync(user.sub));
+      if (auth0User?.sub) {
+        const result = await dispatch(getUserAsync(auth0User.sub));
         if (result?.payload) {
           setProfileValues(result.payload.profile);
         }
       }
     };
     fetchUserProfile();
-  }, [dispatch, user]);
-
-  // useEffect(async() => {
-  //   if(user?.sub){
-  //   await dispatch(getUserAsync(user.sub)); 
-  //   setProfileValues(value);
-  //   }
-  // },[dispatch,user])
-
-
+  }, [dispatch, auth0User]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -79,9 +71,12 @@ const UserProfile = () => {
     setProfileValues(value);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsEditing(false);
-    dispatch(updateUserAsync({userProfile:profileValues,userName:user?.sub}));
+    await dispatch(
+      updateUserAsync({ userProfile: profileValues, userName: auth0User?.sub })
+    );
+    await updateUserProfile(auth0User?.sub);
   };
 
   const handleCheckboxChange = (category, item, checked) => {
@@ -273,79 +268,79 @@ const UserProfile = () => {
                 </Select>
               </HStack>
             </HStack>
-        <HStack spacing='30px' align = "start">
-            {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
-              <Box>
-                <HStack>
-                  {" "}
-                  <Text>Therapy Focus:</Text>
-                  {!isEditing && (
-                    <Textarea
-                      placeholder={profileValues?.therapyFocus.join(", ")}
-                      disabled={true}
-                    />
+            <HStack spacing="30px" align="start">
+              {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
+                <Box>
+                  <HStack>
+                    {" "}
+                    <Text>Therapy Focus:</Text>
+                    {!isEditing && (
+                      <Textarea
+                        placeholder={profileValues?.therapyFocus.join(", ")}
+                        disabled={true}
+                      />
+                    )}
+                  </HStack>
+                  {isEditing && (
+                    <Stack direction="column" spacing="10px" ml="16px">
+                      {therapyFocuses.map((focus, index) => (
+                        <Checkbox
+                          key={index}
+                          defaultChecked={profileValues?.therapyFocus?.includes(
+                            focus
+                          )}
+                          onChange={(e) =>
+                            handleCheckboxChange(
+                              "therapyFocus",
+                              focus,
+                              e.target.checked
+                            )
+                          }
+                          disabled={!isEditing}
+                        >
+                          {focus}
+                        </Checkbox>
+                      ))}
+                    </Stack>
                   )}
-                </HStack>
-                {isEditing && (
-                  <Stack direction="column" spacing="10px" ml="16px">
-                    {therapyFocuses.map((focus, index) => (
-                      <Checkbox
-                        key={index}
-                        defaultChecked={profileValues?.therapyFocus?.includes(
-                          focus
-                        )}
-                        onChange={(e) =>
-                          handleCheckboxChange(
-                            "therapyFocus",
-                            focus,
-                            e.target.checked
-                          )
-                        }
-                        disabled={!isEditing}
-                      >
-                        {focus}
-                      </Checkbox>
-                    ))}
-                  </Stack>
-                )}
-              </Box>
-            )}
-            {(profileValues?.therapyMethods?.length > 0 || isEditing) && (
-              <Box>
-                <HStack>
-                  {" "}
-                  <Text>Therapy Methods:</Text>
-                  {!isEditing && (
-                    <Textarea
-                      placeholder={profileValues?.therapyMethods?.join(", ")}
-                      disabled={true}
-                    />
+                </Box>
+              )}
+              {(profileValues?.therapyMethods?.length > 0 || isEditing) && (
+                <Box>
+                  <HStack>
+                    {" "}
+                    <Text>Therapy Methods:</Text>
+                    {!isEditing && (
+                      <Textarea
+                        placeholder={profileValues?.therapyMethods?.join(", ")}
+                        disabled={true}
+                      />
+                    )}
+                  </HStack>
+                  {isEditing && (
+                    <Stack direction="column" spacing="10px" ml="16px">
+                      {therapyMethods.map((method, index) => (
+                        <Checkbox
+                          key={index}
+                          defaultChecked={profileValues?.therapyMethods?.includes(
+                            method
+                          )}
+                          onChange={(e) =>
+                            handleCheckboxChange(
+                              "therapyMethods",
+                              method,
+                              e.target.checked
+                            )
+                          }
+                          disabled={!isEditing}
+                        >
+                          {method}
+                        </Checkbox>
+                      ))}
+                    </Stack>
                   )}
-                </HStack>
-                {isEditing && (
-                  <Stack direction="column" spacing="10px" ml="16px">
-                    {therapyMethods.map((method, index) => (
-                      <Checkbox
-                        key={index}
-                        defaultChecked={profileValues?.therapyMethods?.includes(
-                          method
-                        )}
-                        onChange={(e) =>
-                          handleCheckboxChange(
-                            "therapyMethods",
-                            method,
-                            e.target.checked
-                          )
-                        }
-                        disabled={!isEditing}
-                      >
-                        {method}
-                      </Checkbox>
-                    ))}
-                  </Stack>
-                )}
-              </Box>
-            )}
+                </Box>
+              )}
             </HStack>
             {(profileValues?.certification?.length > 0 || isEditing) && (
               <Box>
@@ -383,7 +378,7 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
-        </VStack>
+          </VStack>
         </Box>
       </div>
       {isEditing && <Footer onCancel={handleCancel} onSave={handleSave} />}

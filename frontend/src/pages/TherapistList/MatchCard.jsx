@@ -23,7 +23,7 @@ const MatchCard = ({ therapistId }) => {
     const fetchTherapist = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/therapists/${therapistId}`,
+          `${import.meta.env.VITE_API_URL}/therapists/${therapistId}`,
           {
             method: "GET",
             headers: {

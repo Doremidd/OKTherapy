@@ -3,7 +3,7 @@ const createUser = async (userProfile, username) => {
     ...userProfile,
     userName: username,
   };
-  const response = await fetch("https://project-24-oktherapy.onrender.com/users", {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,7 +20,7 @@ const createUser = async (userProfile, username) => {
 };
 
 const getUser = async (userName) => {
-  const response = await fetch(`https://project-24-oktherapy.onrender.com/users/${userName}`, {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${userName}`, {
     method: "GET",
   });
   return response.json();
@@ -28,7 +28,7 @@ const getUser = async (userName) => {
 
 //updateUser function
 const updateUser = async (userProfile,userName) => {
-  const response = await fetch(`https://project-24-oktherapy.onrender.com/users/${userName}`, {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${userName}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -40,7 +40,6 @@ const updateUser = async (userProfile,userName) => {
   if (!response.ok) {
     const errorMessage = data?.message;
     throw new Error(errorMessage);
-    console.log(errorMessage)
   }
   return data;
 };
