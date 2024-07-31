@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const User = require("../models/userModel");
 const Therapist = require("../models/therapistModel");
+const { convertUserCertifications, convertUserApproaches } = require("../utils");
 
 
 
@@ -83,9 +84,10 @@ router.put("/:username/therapists", async function (req, res, next) {
     matchingCriteria.inPersonAvailability = 'Yes';
   }
 
-  //if (foundUser.therapyMethods && foundUser.therapyMethods.length > 0) {
-  //  matchingCriteria.approachesUsed = { $in: foundUser.therapyMethods };
-  //}
+  if (foundUser.therapyMethods && foundUser.therapyMethods.length > 0) {
+    matchingCriteria.approachesUsed = { $in: foundUser.therapyMethods };
+  }
+
   if (foundUser.certification && foundUser.certification.length > 0) {
     let trimmedCertification = foundUser.certification.map(s => s.split(":")[0]);
     matchingCriteria.certification = { $in: trimmedCertification };
@@ -122,6 +124,22 @@ router.put("/:username/therapists", async function (req, res, next) {
     //matchedTherapists = uniqueTherapists;
   }
 
+  // get each matchedScore
+  const userCertifications = foundUser.certification || [];
+  const userMethods = foundUser.therapyMethods || [];
+  matchedTherapists = matchedTherapists.map(therapist => {
+    const scrapedCertifications = therapist.certification || [];
+    const scrapedMethods = therapist.approachesUsed || [];
+    const { matchedScore: certScore } = convertUserCertifications(scrapedCertifications, userCertifications);
+    const { matchedScore: methodScore } = convertUserApproaches(scrapedMethods, userMethods);
+    const totalScore = (certScore + methodScore) / 2; 
+    return { ...therapist.toObject(), totalScore };
+  });
+
+  // Sort therapists by matchedScore
+  matchedTherapists.sort((a, b) => b.matchedScore - a.matchedScore);
+
+  // get top 5
   matchedTherapists = matchedTherapists.slice(0, 5);
   
   // Update user profile
@@ -129,6 +147,6 @@ router.put("/:username/therapists", async function (req, res, next) {
   await foundUser.save();
   
   return res.send(foundUser);
-})
+});
 
 module.exports = router;
