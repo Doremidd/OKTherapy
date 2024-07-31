@@ -38,6 +38,8 @@ const UserProfile = () => {
 
   const [profileValues, setProfileValues] = useState({
     ...value,
+    firstName: value?.firstName || "",
+    lastName: value?.lastName || "",
     budget: value?.budget || [100, 300],
     age: value?.age || 0,
     gender: value?.gender || "",
@@ -88,7 +90,7 @@ const UserProfile = () => {
 
   return (
     <>
-      <Header isEditing={isEditing} onEdit={handleEdit} />
+      <Header isEditing={isEditing} onEdit={handleEdit} profileValues={profileValues} />
       <div>
         <Box mt="48px" mb="48px">
           <VStack
@@ -99,6 +101,32 @@ const UserProfile = () => {
             textAlign="left"
           >
             <HStack as="section" justifyContent="space-between" width="100%">
+              <HStack width="40%">
+                <Text>First Name</Text>
+                <Input
+                  value={profileValues?.firstName}
+                  onChange={(e) =>
+                    setProfileValues({
+                      ...profileValues,
+                      firstName: e.target.value,
+                    })
+                  }
+                  disabled={!isEditing}
+                />
+              </HStack>
+              <HStack width="40%">
+                <Text>Last Name</Text>
+                <Input
+                  value={profileValues?.lastName}
+                  onChange={(e) =>
+                    setProfileValues({
+                      ...profileValues,
+                      lastName: e.target.value,
+                    })
+                  }
+                  disabled={!isEditing}
+                />
+              </HStack>
               <HStack width="40%">
                 <Text>Age</Text>
                 <NumberInput

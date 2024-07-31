@@ -15,7 +15,7 @@ const INITIAL_STATE = {
   matchedTherapists: [],
   createUser: REQUEST_STATE.IDLE,
   getUser: REQUEST_STATE.IDLE,
-  updateUser:REQUEST_STATE.IDLE,
+  updateUser: REQUEST_STATE.IDLE,
   error: null,
 };
 export const userSlice = createSlice(
