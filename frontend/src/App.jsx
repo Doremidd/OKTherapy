@@ -6,6 +6,7 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import Footer from "./components/Footer";
 import EmailGenerator from "./pages/EmailGenerator/EmailGenerator";
 import Home from "./pages/Home";
+import TherapistList from "./pages/TherapistList/TherapistList";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/email-generator" element={<EmailGenerator />} />
+        <Route path="/matches" element={<TherapistList />} />
       </Routes>
       <Footer />
     </Router>
