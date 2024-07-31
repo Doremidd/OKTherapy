@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 const DrawerMenu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef<HTMLButtonElement>(null);
+  const btnRef = React.useRef(null);
 
   return (
     <>
