@@ -127,6 +127,11 @@ const MatchCard = ({ therapistId }) => {
 
 MatchCard.propTypes = {
   therapistId: PropTypes.string.isRequired,
+  therapist: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    contactFormUrl: PropTypes.string,
+  }),
 };
 
 export default MatchCard;
