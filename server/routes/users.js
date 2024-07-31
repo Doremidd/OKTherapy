@@ -15,6 +15,8 @@ router.get("/:username", async function (req, res, next) {
   const userObject = {
     userName,
     profile: {
+      firstName: foundUser.firstName,
+      lastName: foundUser.lastName,
       age: foundUser.age,
       gender: foundUser.gender,
       sexuality: foundUser.sexuality,
