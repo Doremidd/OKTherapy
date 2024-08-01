@@ -14,21 +14,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+        
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-        - name: Install dependencies for frontend 
+      - name: Install dependencies for frontend 
         run: |
           cd frontend
           npm install
           npm run build
 
-        - name: Install dependencies and run tests for server-side
+      - name: Install dependencies and run tests for server-side
         run: |
           cd server
           npm install
           npm test
-  
