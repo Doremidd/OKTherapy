@@ -20,7 +20,15 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies
+        - name: Install dependencies for frontend 
         run: |
-          cd backend
+          cd frontend
           npm install
+          npm run build
+
+        - name: Install dependencies and run tests for server-side
+        run: |
+          cd server
+          npm install
+          npm test
+  
