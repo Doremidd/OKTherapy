@@ -100,8 +100,8 @@ const UserProfile = () => {
           <VStack
             spacing="40px"
             alignItems="start"
-            paddingLeft="20%"
-            paddingRight="20%"
+            paddingLeft="15%"
+            paddingRight="15%"
             textAlign="left"
           >
             <Stack
@@ -333,9 +333,11 @@ const UserProfile = () => {
               </HStack>
             </Stack>
             <Stack
-              align="start"
+              as="section"
+              justifyContent="space-between"
+              width="100%"
               direction={["column", null, "row"]}
-              spacing={["30px", null, "0px"]}
+              spacing={["40px", null, "0px"]}
             >
               {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
                 <Box>
