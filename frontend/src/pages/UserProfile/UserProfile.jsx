@@ -38,6 +38,8 @@ const UserProfile = () => {
 
   const [profileValues, setProfileValues] = useState({
     ...value,
+    firstName: value?.firstName || "",
+    lastName: value?.lastName || "",
     budget: value?.budget || [100, 300],
     age: value?.age || 0,
     gender: value?.gender || "",
@@ -88,7 +90,11 @@ const UserProfile = () => {
 
   return (
     <>
-      <Header isEditing={isEditing} onEdit={handleEdit} />
+      <Header
+        isEditing={isEditing}
+        onEdit={handleEdit}
+        profileValues={profileValues}
+      />
       <div>
         <Box mt="48px" mb="48px">
           <VStack
@@ -98,6 +104,40 @@ const UserProfile = () => {
             paddingRight="20%"
             textAlign="left"
           >
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
+                <Text width="70%">First Name</Text>
+                <Input
+                  value={profileValues?.firstName}
+                  onChange={(e) =>
+                    setProfileValues({
+                      ...profileValues,
+                      firstName: e.target.value,
+                    })
+                  }
+                  disabled={!isEditing}
+                />
+              </HStack>
+              <HStack width={["100%", null, "40%"]}>
+                <Text width="70%">Last Name</Text>
+                <Input
+                  value={profileValues?.lastName}
+                  onChange={(e) =>
+                    setProfileValues({
+                      ...profileValues,
+                      lastName: e.target.value,
+                    })
+                  }
+                  disabled={!isEditing}
+                />
+              </HStack>
+            </Stack>
             <Stack
               as="section"
               justifyContent="space-between"

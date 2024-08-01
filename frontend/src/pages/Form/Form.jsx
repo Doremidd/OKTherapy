@@ -33,6 +33,8 @@ const TherapyForm = () => {
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     age: "",
     gender: "",
     sexuality: "",
@@ -50,6 +52,34 @@ const TherapyForm = () => {
   const isOtherSexuality =
     !sexualities.includes(formData.sexuality) && formData.sexuality !== "";
   const steps = [
+    {
+      label: "First Name",
+      component: (
+        <FormControl id="firstName" isRequired>
+          <FormLabel>First Name</FormLabel>
+          <Input
+            type="text"
+            value={formData.firstName}
+            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+            placeholder="Your First Name"
+          />
+        </FormControl>
+      ),
+    },
+    {
+      label: "Last Name",
+      component: (
+        <FormControl id="lastName" isRequired>
+          <FormLabel>Last Name</FormLabel>
+          <Input
+            type="text"
+            value={formData.lastName}
+            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+            placeholder="Your Last Name"
+          />
+        </FormControl>
+      ),
+    },
     {
       label: "Age",
       component: (
@@ -300,16 +330,16 @@ const TherapyForm = () => {
     }
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await dispatch(createUserAsync({ userProfile: formData, username: auth0User?.sub }));
       await updateUserProfile(auth0User?.sub);
       console.log("Form submitted:", formData);
-    } catch(error) {
+    } catch (error) {
       console.error(error);
     }
-    window.location.reload()
+    window.location.reload();
   };
 
   return (
