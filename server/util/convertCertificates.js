@@ -1,5 +1,5 @@
 // Pre-condition: userCertifications is not empty
-export function convertUserCertifications(
+function convertUserCertifications(
   scrapedCertifications,
   userCertifications
 ) {
@@ -21,6 +21,8 @@ export function convertUserCertifications(
 
   return { allCovered, matchedScore };
 }
+
+module.exports = convertUserCertifications;
 
 // Example:
 // const scrapedCertifications = ["MCP", "CCC"];
