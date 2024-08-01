@@ -90,19 +90,29 @@ const UserProfile = () => {
 
   return (
     <>
-      <Header isEditing={isEditing} onEdit={handleEdit} profileValues={profileValues} />
+      <Header
+        isEditing={isEditing}
+        onEdit={handleEdit}
+        profileValues={profileValues}
+      />
       <div>
         <Box mt="48px" mb="48px">
           <VStack
             spacing="40px"
             alignItems="start"
-            paddingLeft="20%"
-            paddingRight="20%"
+            paddingLeft="15%"
+            paddingRight="15%"
             textAlign="left"
           >
-            <HStack as="section" justifyContent="space-between" width="100%">
-              <HStack width="40%">
-                <Text>First Name</Text>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
+                <Text width="70%">First Name</Text>
                 <Input
                   value={profileValues?.firstName}
                   onChange={(e) =>
@@ -114,8 +124,8 @@ const UserProfile = () => {
                   disabled={!isEditing}
                 />
               </HStack>
-              <HStack width="40%">
-                <Text>Last Name</Text>
+              <HStack width={["100%", null, "40%"]}>
+                <Text width="70%">Last Name</Text>
                 <Input
                   value={profileValues?.lastName}
                   onChange={(e) =>
@@ -127,7 +137,15 @@ const UserProfile = () => {
                   disabled={!isEditing}
                 />
               </HStack>
-              <HStack width="40%">
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Age</Text>
                 <NumberInput
                   size="sm"
@@ -150,7 +168,7 @@ const UserProfile = () => {
                   </NumberInputStepper>
                 </NumberInput>
               </HStack>
-              <HStack width="40%">
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Gender</Text>
                 <Select
                   value={profileValues?.gender}
@@ -170,9 +188,15 @@ const UserProfile = () => {
                   <option value="Other">Other</option>
                 </Select>
               </HStack>
-            </HStack>
-            <HStack as="section" justifyContent="space-between" width="100%">
-              <HStack width="40%">
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Sexuality</Text>
                 <Select
                   value={profileValues?.sexuality}
@@ -192,7 +216,7 @@ const UserProfile = () => {
                   <option value="Other">Other</option>
                 </Select>
               </HStack>
-              <HStack width="40%">
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Location</Text>
                 <Input
                   value={profileValues?.location}
@@ -205,9 +229,15 @@ const UserProfile = () => {
                   disabled={!isEditing}
                 />
               </HStack>
-            </HStack>
-            <HStack as="section" justifyContent="space-between" width="100%">
-              <HStack width="40%">
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Min Budget</Text>
                 <NumberInput
                   size="sm"
@@ -231,7 +261,7 @@ const UserProfile = () => {
                   </NumberInputStepper>
                 </NumberInput>
               </HStack>
-              <HStack width="40%">
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Max Budget</Text>
                 <NumberInput
                   size="sm"
@@ -255,9 +285,15 @@ const UserProfile = () => {
                   </NumberInputStepper>
                 </NumberInput>
               </HStack>
-            </HStack>
-            <HStack as="section" justifyContent="space-between" width="100%">
-              <HStack width="40%">
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Therapy Mode</Text>
                 <Select
                   value={profileValues?.therapistModes}
@@ -276,7 +312,7 @@ const UserProfile = () => {
                   ))}
                 </Select>
               </HStack>
-              <HStack width="40%">
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Therapist Gender</Text>
                 <Select
                   value={profileValues?.therapistGender}
@@ -295,8 +331,14 @@ const UserProfile = () => {
                   ))}
                 </Select>
               </HStack>
-            </HStack>
-            <HStack spacing="30px" align="start">
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
               {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
                 <Box>
                   <HStack>
@@ -369,7 +411,7 @@ const UserProfile = () => {
                   )}
                 </Box>
               )}
-            </HStack>
+            </Stack>
             {(profileValues?.certification?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
