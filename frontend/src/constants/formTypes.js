@@ -8,6 +8,8 @@ import {
 } from "./formOptions";
 
 export const FormData = {
+  firstName: String,
+  lastName: String,
   age: Number,
   gender: genders,
   sexuality: sexualities,

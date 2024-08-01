@@ -27,15 +27,19 @@ import {
   certification,
 } from "../../constants/formOptions";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserAsync,updateUserAsync } from "../../redux/thunk";
-import { useAuth0 } from "@auth0/auth0-react";
+import { getUserAsync, updateUserAsync } from "../../redux/thunk";
+import { updateUserProfile } from "../../util/updateUserProfile";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const value = useSelector((state) => state.user.profile);
+  const auth0User = useSelector((state) => state.user.auth0User);
+
   const [profileValues, setProfileValues] = useState({
     ...value,
+    firstName: value?.firstName || "",
+    lastName: value?.lastName || "",
     budget: value?.budget || [100, 300],
     age: value?.age || 0,
     gender: value?.gender || "",
@@ -47,28 +51,18 @@ const UserProfile = () => {
     therapyMethods: value?.therapyMethods || [],
     certification: value?.certification || [],
   });
-  const { user } = useAuth0();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (user?.sub) {
-        const result = await dispatch(getUserAsync(user.sub));
+      if (auth0User?.sub) {
+        const result = await dispatch(getUserAsync(auth0User.sub));
         if (result?.payload) {
           setProfileValues(result.payload.profile);
         }
       }
     };
     fetchUserProfile();
-  }, [dispatch, user]);
-
-  // useEffect(async() => {
-  //   if(user?.sub){
-  //   await dispatch(getUserAsync(user.sub)); 
-  //   setProfileValues(value);
-  //   }
-  // },[dispatch,user])
-
-
+  }, [dispatch, auth0User]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -79,9 +73,12 @@ const UserProfile = () => {
     setProfileValues(value);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsEditing(false);
-    dispatch(updateUserAsync({userProfile:profileValues,userName:user?.sub}));
+    await dispatch(
+      updateUserAsync({ userProfile: profileValues, userName: auth0User?.sub })
+    );
+    await updateUserProfile(auth0User?.sub);
   };
 
   const handleCheckboxChange = (category, item, checked) => {
@@ -93,18 +90,62 @@ const UserProfile = () => {
 
   return (
     <>
-      <Header isEditing={isEditing} onEdit={handleEdit} />
+      <Header
+        isEditing={isEditing}
+        onEdit={handleEdit}
+        profileValues={profileValues}
+      />
       <div>
         <Box mt="48px" mb="48px">
           <VStack
             spacing="40px"
             alignItems="start"
-            paddingLeft="20%"
-            paddingRight="20%"
+            paddingLeft="15%"
+            paddingRight="15%"
             textAlign="left"
           >
-            <HStack as="section" justifyContent="space-between" width="100%">
-              <HStack width="40%">
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
+                <Text width="70%">First Name</Text>
+                <Input
+                  value={profileValues?.firstName}
+                  onChange={(e) =>
+                    setProfileValues({
+                      ...profileValues,
+                      firstName: e.target.value,
+                    })
+                  }
+                  disabled={!isEditing}
+                />
+              </HStack>
+              <HStack width={["100%", null, "40%"]}>
+                <Text width="70%">Last Name</Text>
+                <Input
+                  value={profileValues?.lastName}
+                  onChange={(e) =>
+                    setProfileValues({
+                      ...profileValues,
+                      lastName: e.target.value,
+                    })
+                  }
+                  disabled={!isEditing}
+                />
+              </HStack>
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Age</Text>
                 <NumberInput
                   size="sm"
@@ -127,7 +168,7 @@ const UserProfile = () => {
                   </NumberInputStepper>
                 </NumberInput>
               </HStack>
-              <HStack width="40%">
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Gender</Text>
                 <Select
                   value={profileValues?.gender}
@@ -147,9 +188,15 @@ const UserProfile = () => {
                   <option value="Other">Other</option>
                 </Select>
               </HStack>
-            </HStack>
-            <HStack as="section" justifyContent="space-between" width="100%">
-              <HStack width="40%">
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Sexuality</Text>
                 <Select
                   value={profileValues?.sexuality}
@@ -169,7 +216,7 @@ const UserProfile = () => {
                   <option value="Other">Other</option>
                 </Select>
               </HStack>
-              <HStack width="40%">
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Location</Text>
                 <Input
                   value={profileValues?.location}
@@ -182,9 +229,15 @@ const UserProfile = () => {
                   disabled={!isEditing}
                 />
               </HStack>
-            </HStack>
-            <HStack as="section" justifyContent="space-between" width="100%">
-              <HStack width="40%">
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Min Budget</Text>
                 <NumberInput
                   size="sm"
@@ -208,7 +261,7 @@ const UserProfile = () => {
                   </NumberInputStepper>
                 </NumberInput>
               </HStack>
-              <HStack width="40%">
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Max Budget</Text>
                 <NumberInput
                   size="sm"
@@ -232,9 +285,15 @@ const UserProfile = () => {
                   </NumberInputStepper>
                 </NumberInput>
               </HStack>
-            </HStack>
-            <HStack as="section" justifyContent="space-between" width="100%">
-              <HStack width="40%">
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Therapy Mode</Text>
                 <Select
                   value={profileValues?.therapistModes}
@@ -253,7 +312,7 @@ const UserProfile = () => {
                   ))}
                 </Select>
               </HStack>
-              <HStack width="40%">
+              <HStack width={["100%", null, "40%"]}>
                 <Text>Therapist Gender</Text>
                 <Select
                   value={profileValues?.therapistGender}
@@ -272,81 +331,87 @@ const UserProfile = () => {
                   ))}
                 </Select>
               </HStack>
-            </HStack>
-        <HStack spacing='30px' align = "start">
-            {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
-              <Box>
-                <HStack>
-                  {" "}
-                  <Text>Therapy Focus:</Text>
-                  {!isEditing && (
-                    <Textarea
-                      placeholder={profileValues?.therapyFocus.join(", ")}
-                      disabled={true}
-                    />
+            </Stack>
+            <Stack
+              as="section"
+              justifyContent="space-between"
+              width="100%"
+              direction={["column", null, "row"]}
+              spacing={["40px", null, "0px"]}
+            >
+              {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
+                <Box width={["100%", null, "40%"]}>
+                  <HStack>
+                    {" "}
+                    <Text>Therapy Focus:</Text>
+                    {!isEditing && (
+                      <Textarea
+                        placeholder={profileValues?.therapyFocus.join(", ")}
+                        disabled={true}
+                      />
+                    )}
+                  </HStack>
+                  {isEditing && (
+                    <Stack direction="column" spacing="10px" ml="16px">
+                      {therapyFocuses.map((focus, index) => (
+                        <Checkbox
+                          key={index}
+                          defaultChecked={profileValues?.therapyFocus?.includes(
+                            focus
+                          )}
+                          onChange={(e) =>
+                            handleCheckboxChange(
+                              "therapyFocus",
+                              focus,
+                              e.target.checked
+                            )
+                          }
+                          disabled={!isEditing}
+                        >
+                          {focus}
+                        </Checkbox>
+                      ))}
+                    </Stack>
                   )}
-                </HStack>
-                {isEditing && (
-                  <Stack direction="column" spacing="10px" ml="16px">
-                    {therapyFocuses.map((focus, index) => (
-                      <Checkbox
-                        key={index}
-                        defaultChecked={profileValues?.therapyFocus?.includes(
-                          focus
-                        )}
-                        onChange={(e) =>
-                          handleCheckboxChange(
-                            "therapyFocus",
-                            focus,
-                            e.target.checked
-                          )
-                        }
-                        disabled={!isEditing}
-                      >
-                        {focus}
-                      </Checkbox>
-                    ))}
-                  </Stack>
-                )}
-              </Box>
-            )}
-            {(profileValues?.therapyMethods?.length > 0 || isEditing) && (
-              <Box>
-                <HStack>
-                  {" "}
-                  <Text>Therapy Methods:</Text>
-                  {!isEditing && (
-                    <Textarea
-                      placeholder={profileValues?.therapyMethods?.join(", ")}
-                      disabled={true}
-                    />
+                </Box>
+              )}
+              {(profileValues?.therapyMethods?.length > 0 || isEditing) && (
+                <Box width={["100%", null, "40%"]}>
+                  <HStack>
+                    {" "}
+                    <Text>Therapy Methods:</Text>
+                    {!isEditing && (
+                      <Textarea
+                        placeholder={profileValues?.therapyMethods?.join(", ")}
+                        disabled={true}
+                      />
+                    )}
+                  </HStack>
+                  {isEditing && (
+                    <Stack direction="column" spacing="10px" ml="16px">
+                      {therapyMethods.map((method, index) => (
+                        <Checkbox
+                          key={index}
+                          defaultChecked={profileValues?.therapyMethods?.includes(
+                            method
+                          )}
+                          onChange={(e) =>
+                            handleCheckboxChange(
+                              "therapyMethods",
+                              method,
+                              e.target.checked
+                            )
+                          }
+                          disabled={!isEditing}
+                        >
+                          {method}
+                        </Checkbox>
+                      ))}
+                    </Stack>
                   )}
-                </HStack>
-                {isEditing && (
-                  <Stack direction="column" spacing="10px" ml="16px">
-                    {therapyMethods.map((method, index) => (
-                      <Checkbox
-                        key={index}
-                        defaultChecked={profileValues?.therapyMethods?.includes(
-                          method
-                        )}
-                        onChange={(e) =>
-                          handleCheckboxChange(
-                            "therapyMethods",
-                            method,
-                            e.target.checked
-                          )
-                        }
-                        disabled={!isEditing}
-                      >
-                        {method}
-                      </Checkbox>
-                    ))}
-                  </Stack>
-                )}
-              </Box>
-            )}
-            </HStack>
+                </Box>
+              )}
+            </Stack>
             {(profileValues?.certification?.length > 0 || isEditing) && (
               <Box>
                 <HStack>
@@ -383,7 +448,7 @@ const UserProfile = () => {
                 )}
               </Box>
             )}
-        </VStack>
+          </VStack>
         </Box>
       </div>
       {isEditing && <Footer onCancel={handleCancel} onSave={handleSave} />}

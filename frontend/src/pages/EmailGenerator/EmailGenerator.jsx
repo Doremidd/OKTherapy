@@ -1,11 +1,15 @@
-import { Container, Text, Button } from "@chakra-ui/react";
+import { Container, Text, Button, Box, Spinner } from "@chakra-ui/react";
 import "./style.css";
 import { useState, useRef, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch } from "react-redux";
 import { getUserAsync } from "../../redux/thunk";
-import { generateAITemplate, generateTemplate1, generateTemplate2 } from "./generateTemplates";
-
+import {
+  generateAITemplate,
+  generateTemplate1,
+  generateTemplate2,
+} from "./generateTemplates";
+import { useSelector } from "react-redux";
+import { useMediaQuery } from "@chakra-ui/react";
 
 const EmailGenerator = () => {
   const dispatch = useDispatch();
@@ -13,56 +17,23 @@ const EmailGenerator = () => {
   const [profile, setProfile] = useState();
   const textareaRef = useRef(null);
   const [textAreaValue, setTextAreaValue] = useState("");
-  const { user } = useAuth0();
+  const auth0User = useSelector((state) => state.user.auth0User);
   const [aiTemplate, setAiTemplate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
 
-  const generateTemplate = (template, userProfile, user) => {
-    if (user && userProfile) {
+  const generateTemplate = (template, userProfile, auth0User) => {
+    if (auth0User && userProfile) {
       switch (template) {
         case 0:
-          return generateTemplate1(userProfile, user);
+          return generateTemplate1(userProfile, auth0User);
         case 1:
-          return generateTemplate2(userProfile, user);
+          return generateTemplate2(userProfile, auth0User);
         default:
           return aiTemplate;
       }
     }
   };
-
-  useEffect(() => {
-    const createAiTemplate = async () => {
-      setAiTemplate(await generateAITemplate(profile, user));
-    };
-    if (profile && user) {
-      createAiTemplate();
-    }
-  }, [profile, user]);
-
-  useEffect(() => {
-    const generateAndSetTemplate = async () => {
-      if (profile && user) {
-        const template = generateTemplate(
-          selectedTemplate,
-          profile,
-          user
-        );
-        setTextAreaValue(template);
-      }
-    };
-    generateAndSetTemplate();
-  }, [selectedTemplate, profile, user]);
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (user?.sub) {
-        const result = await dispatch(getUserAsync(user.sub));
-        if (result?.payload) {
-          setProfile(result.payload.profile);
-        }
-      }
-    };
-    fetchUserProfile();
-  }, [dispatch, user]);
 
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
@@ -73,17 +44,49 @@ const EmailGenerator = () => {
   };
 
   useEffect(() => {
+    const createAiTemplate = async () => {
+      setAiTemplate(await generateAITemplate(profile, auth0User, setIsLoading));
+    };
+    if (profile && auth0User) {
+      createAiTemplate();
+    }
+  }, [profile, auth0User]);
+
+  useEffect(() => {
+    const generateAndSetTemplate = async () => {
+      const template = generateTemplate(selectedTemplate, profile, auth0User);
+      setTextAreaValue(template);
+    };
+    if (profile && auth0User) {
+      generateAndSetTemplate();
+    }
+  }, [selectedTemplate, profile, auth0User, aiTemplate]);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (auth0User?.sub) {
+        const result = await dispatch(getUserAsync(auth0User.sub));
+        if (result?.payload) {
+          setProfile(result.payload.profile);
+        }
+      }
+    };
+    fetchUserProfile();
+  }, [dispatch, auth0User]);
+
+  useEffect(() => {
     adjustTextareaHeight();
   }, [textAreaValue]);
 
   const copyContent = () => {
-    navigator.clipboard.writeText(textAreaValue)
-    .then(() => {
-      alert("Email template copied to clipboard")
-    })
-    .catch((err) => {
-      console.error("Failed to copy text: ", err);
-    });
+    navigator.clipboard
+      .writeText(textAreaValue)
+      .then(() => {
+        alert("Email template copied to clipboard");
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
   };
 
   return (
@@ -95,7 +98,7 @@ const EmailGenerator = () => {
         Stuck drafting that first email to a therapist? Select template below to
         start generating an email to your matched therapist.
       </Text>
-      <div style={{ display: "flex", gap: "24px" }}>
+      <div style={{ display: "flex", gap: "24px", flexDirection: isLargerThan600 ? "row" : "column" }}>
         <Button
           color="black"
           size="lg"
@@ -122,19 +125,31 @@ const EmailGenerator = () => {
         </Button>
       </div>
       <br />
-      <textarea
-        ref={textareaRef}
-        value={textAreaValue}
-        onChange={(e) => setTextAreaValue(e.target.value)}
-        onInput={adjustTextareaHeight}
-        style={{
-          width: "100%",
-          resize: "none",
-          overflow: "hidden",
-          fontSize: "1rem",
-          padding: "8px",
-        }}
-      />
+      {isLoading && selectedTemplate === 2 ? (
+        <Box pb="10%" pt="10%">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="brand.500"
+            color="brand.600"
+            size="xl"
+          />
+        </Box>
+      ) : (
+        <textarea
+          ref={textareaRef}
+          value={textAreaValue}
+          onChange={(e) => setTextAreaValue(e.target.value)}
+          onInput={adjustTextareaHeight}
+          style={{
+            width: "100%",
+            resize: "none",
+            overflow: "hidden",
+            fontSize: "1rem",
+            padding: "8px",
+          }}
+        />
+      )}
       <Button onClick={copyContent}>Copy</Button>
     </Container>
   );

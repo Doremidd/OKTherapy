@@ -8,14 +8,13 @@ const Hero = () => {
     <Box
       position="relative"
       width="100%"
-      height="650px"
       bg="#F0ECF7"
       padding="100px 0 100px 0"
       display="flex"
       justifyContent="center"
     >
       <Box maxWidth="1200px" width="100%" padding="0 20px">
-        <Flex alignItems="center" height="100%">
+        <Flex alignItems="center" height="100%" flexDirection={["column", null, "row"]}>
           <Box flex="1" textAlign="left" padding="0 20px">
             <Text
               fontStyle="normal"
@@ -48,14 +47,16 @@ const Hero = () => {
               lineHeight="28px"
               _hover={{ bg: "#55695E" }}
               onClick={() =>
-                loginWithRedirect({ redirectUri: "http://localhost:5173/form" })
+                loginWithRedirect({
+                  redirectUri: `${window.location.origin}/home`,
+                })
               }
             >
               Get Started
             </Button>
           </Box>
           <Box flex="1" padding="0 20px">
-            <Image src={therapyImage} alt="Therapy" height="auto" maxW="100%" />
+            <Image src={therapyImage} alt="Therapy" height="auto" maxW="100%" mt={["80px"]}/>
           </Box>
         </Flex>
       </Box>

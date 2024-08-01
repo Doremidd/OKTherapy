@@ -14,8 +14,10 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { getTherapist } from "../../redux/therapistSlice";
+import { useMediaQuery } from "@chakra-ui/react";
 
 const MatchCard = ({ therapistId }) => {
+  const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
   const dispatch = useDispatch();
   const [therapist, setTherapist] = useState(null);
 
@@ -23,7 +25,7 @@ const MatchCard = ({ therapistId }) => {
     const fetchTherapist = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/therapists/${therapistId}`,
+          `${import.meta.env.VITE_API_URL}/therapists/${therapistId}`,
           {
             method: "GET",
             headers: {
@@ -74,34 +76,65 @@ const MatchCard = ({ therapistId }) => {
         <AccordionPanel>
           <div className="accordionPanel">
             <Text className="accordionPanelText">
+              Description:{" "}
+              {therapist?.description || "No description available"}
+            </Text>
+            <Text className="accordionPanelText">
               Specializes in: {therapist?.areaOfPractice?.join(", ") || ""}
             </Text>
             <Text className="accordionPanelText">
               Approaches Used: {therapist?.approachesUsed?.join(", ") || ""}
             </Text>
             <br></br>
-            {therapist?.website && (
-              <Button
-                size="sm"
-                leftIcon={<LinkIcon />}
-                colorScheme="brand"
-                variant="outline"
-                className="leftButton"
-              >
-                {therapist?.website}
-              </Button>
-            )}
-            {therapist?.phone && (
-              <Button
-                size="sm"
-                leftIcon={<PhoneIcon />}
-                colorScheme="brand"
-                variant="outline"
-                className="rightButton"
-              >
-                {therapist.phone}
-              </Button>
-            )}
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                flexDirection: isLargerThan800 ? "row" : "column",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+              }}
+            >
+              {therapist?.website && (
+                <Button
+                  size="sm"
+                  leftIcon={<LinkIcon />}
+                  colorScheme="brand"
+                  variant="outline"
+                  className="leftButton"
+                  onClick={() => window.open(therapist?.website, "_blank")}
+                >
+                  Therapist&apos;s website
+                </Button>
+              )}
+              {therapist?.phone && (
+                <Button
+                  size="sm"
+                  leftIcon={<PhoneIcon />}
+                  colorScheme="brand"
+                  variant="outline"
+                  className="middleButton"
+                  marginLeft="0px"
+                >
+                  {therapist.phone}
+                </Button>
+              )}
+              {therapist?.contactFormUrl && (
+                <Button
+                  size="sm"
+                  leftIcon={<LinkIcon />}
+                  colorScheme="brand"
+                  variant="outline"
+                  className="rightButton"
+                  marginLeft="0px"
+                  onClick={() =>
+                    window.open(therapist.contactFormUrl, "_blank")
+                  }
+                >
+                  Contact therapist
+                </Button>
+              )}
+            </div>
           </div>
         </AccordionPanel>
       </AccordionItem>
@@ -111,6 +144,11 @@ const MatchCard = ({ therapistId }) => {
 
 MatchCard.propTypes = {
   therapistId: PropTypes.string.isRequired,
+  therapist: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    contactFormUrl: PropTypes.string,
+  }),
 };
 
 export default MatchCard;

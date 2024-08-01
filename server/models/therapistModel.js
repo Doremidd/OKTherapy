@@ -18,6 +18,10 @@ const therapistSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    required: true,
+  },
   areaOfPractice: {
     type: [String],
     required: true,
@@ -41,6 +45,10 @@ const therapistSchema = new mongoose.Schema({
     required: true,
   },
   phone: {
+    type: String,
+    required: true,
+  },
+  contactFormUrl: {
     type: String,
     required: true,
   },
