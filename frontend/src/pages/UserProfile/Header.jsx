@@ -6,12 +6,12 @@ import {
   Button,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { useAuth0 } from "@auth0/auth0-react";
+import PropTypes from 'prop-types';
+import { useSelector } from "react-redux";
 
-// eslint-disable-next-line react/prop-types
-export default function Header({ isEditing, onEdit }) {
-  const { user } = useAuth0();
+export default function Header({ isEditing, onEdit, profileValues }) {
   const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
+  const auth0User = useSelector((state) => state.user.auth0User);
   return (
     <>
       <Box
@@ -23,10 +23,10 @@ export default function Header({ isEditing, onEdit }) {
         justifyContent="center"
       >
         <HStack spacing="30px" ml="20%" mr="20%">
-          <Avatar size="xl"></Avatar>
+          <Avatar src={auth0User?.picture} alt="profile-picture" size="xl"></Avatar>
           <Box style={{ textAlign: "left" }}>
             <Heading fontWeight="500" fontSize="30px" color="#000000">
-              {user?.given_name} {user?.family_name}
+              {profileValues?.firstName} {profileValues?.lastName}
             </Heading>
           </Box>
           {!isEditing && isLargerThan600 && (
@@ -57,3 +57,12 @@ export default function Header({ isEditing, onEdit }) {
     </>
   );
 }
+
+Header.propTypes = {
+  isEditing: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  profileValues: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+  }).isRequired,
+};

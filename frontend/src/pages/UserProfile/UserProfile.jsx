@@ -340,7 +340,7 @@ const UserProfile = () => {
               spacing={["40px", null, "0px"]}
             >
               {(profileValues?.therapyFocus?.length > 0 || isEditing) && (
-                <Box>
+                <Box width={["100%", null, "40%"]}>
                   <HStack>
                     {" "}
                     <Text>Therapy Focus:</Text>
@@ -376,7 +376,7 @@ const UserProfile = () => {
                 </Box>
               )}
               {(profileValues?.therapyMethods?.length > 0 || isEditing) && (
-                <Box>
+                <Box width={["100%", null, "40%"]}>
                   <HStack>
                     {" "}
                     <Text>Therapy Methods:</Text>

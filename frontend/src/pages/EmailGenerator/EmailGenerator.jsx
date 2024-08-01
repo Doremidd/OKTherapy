@@ -1,4 +1,4 @@
-import { Container, Text, Button } from "@chakra-ui/react";
+import { Container, Text, Button, Box, Spinner } from "@chakra-ui/react";
 import "./style.css";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -9,6 +9,7 @@ import {
   generateTemplate2,
 } from "./generateTemplates";
 import { useSelector } from "react-redux";
+import { useMediaQuery } from "@chakra-ui/react";
 
 const EmailGenerator = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,8 @@ const EmailGenerator = () => {
   const [textAreaValue, setTextAreaValue] = useState("");
   const auth0User = useSelector((state) => state.user.auth0User);
   const [aiTemplate, setAiTemplate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLargerThan600] = useMediaQuery("(min-width: 600px)");
 
   const generateTemplate = (template, userProfile, auth0User) => {
     if (auth0User && userProfile) {
@@ -42,7 +45,7 @@ const EmailGenerator = () => {
 
   useEffect(() => {
     const createAiTemplate = async () => {
-      setAiTemplate(await generateAITemplate(profile, auth0User));
+      setAiTemplate(await generateAITemplate(profile, auth0User, setIsLoading));
     };
     if (profile && auth0User) {
       createAiTemplate();
@@ -95,7 +98,7 @@ const EmailGenerator = () => {
         Stuck drafting that first email to a therapist? Select template below to
         start generating an email to your matched therapist.
       </Text>
-      <div style={{ display: "flex", gap: "24px" }}>
+      <div style={{ display: "flex", gap: "24px", flexDirection: isLargerThan600 ? "row" : "column" }}>
         <Button
           color="black"
           size="lg"
@@ -122,19 +125,31 @@ const EmailGenerator = () => {
         </Button>
       </div>
       <br />
-      <textarea
-        ref={textareaRef}
-        value={textAreaValue}
-        onChange={(e) => setTextAreaValue(e.target.value)}
-        onInput={adjustTextareaHeight}
-        style={{
-          width: "100%",
-          resize: "none",
-          overflow: "hidden",
-          fontSize: "1rem",
-          padding: "8px",
-        }}
-      />
+      {isLoading && selectedTemplate === 2 ? (
+        <Box pb="10%" pt="10%">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="brand.500"
+            color="brand.600"
+            size="xl"
+          />
+        </Box>
+      ) : (
+        <textarea
+          ref={textareaRef}
+          value={textAreaValue}
+          onChange={(e) => setTextAreaValue(e.target.value)}
+          onInput={adjustTextareaHeight}
+          style={{
+            width: "100%",
+            resize: "none",
+            overflow: "hidden",
+            fontSize: "1rem",
+            padding: "8px",
+          }}
+        />
+      )}
       <Button onClick={copyContent}>Copy</Button>
     </Container>
   );

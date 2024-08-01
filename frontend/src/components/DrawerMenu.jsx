@@ -10,14 +10,25 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const DrawerMenu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
+  const { logout } = useAuth0();
 
   return (
     <>
-      <Button ref={btnRef} bg={"transparent"} colorScheme="brand" onClick={onOpen}>
+      <Button
+        ref={btnRef}
+        bg={"transparent"}
+        onClick={onOpen}
+        sx={{
+          "&:hover": {
+            backgroundColor: "#F0ECF7",
+          },
+        }}
+      >
         <img
           src="/assets/OKTherapy.png"
           alt="Logo"
@@ -43,8 +54,11 @@ const DrawerMenu = () => {
             <Button as={Link} to="/email-generator" w="100%" mb={2}>
               Email Templates
             </Button>
-            <Button as={Link} to="/profile" w="100%">
+            <Button as={Link} to="/profile" w="100%" mb={2}>
               Profile
+            </Button>
+            <Button variant="outline" w="100%" colorScheme="brand" onClick={() => logout()}>
+              Log out
             </Button>
           </DrawerBody>
         </DrawerContent>
