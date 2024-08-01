@@ -25,6 +25,7 @@ jobs:
           cd frontend
           npm install
           npm run build
+         
 
       - name: Install dependencies and run tests for server-side
         run: |
