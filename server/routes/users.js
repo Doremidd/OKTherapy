@@ -31,7 +31,7 @@ router.get("/:username", async function (req, res, next) {
     },
     matchedTherapists: foundUser.matchedTherapists,
   };
-  console.log(userObject);
+  // console.log(userObject);
   return res.send(userObject);
 });
 
@@ -39,7 +39,6 @@ router.get("/:username", async function (req, res, next) {
 router.post("/", async function (req, res, next) {
   try {
     const user = new User(req.body);
-    console.log(user);
     await user.save();
     res.status(201).json(user);
   } catch (err) {
