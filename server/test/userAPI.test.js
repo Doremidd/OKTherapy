@@ -80,7 +80,7 @@ describe('API test for users', () => {
     };
   
   User.prototype.save = jest.fn().mockResolvedValue(mockUser);
-  console.log("Mock implementation of save method:", User.prototype.save.mock);
+  // console.log("Mock implementation of save method:", User.prototype.save.mock);
 
 	const response = await request(app).post('/users').send(mockUser.profile,mockUser.userName);
   
