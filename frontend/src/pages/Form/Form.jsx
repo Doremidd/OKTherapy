@@ -312,13 +312,11 @@ const TherapyForm = () => {
         </FormControl>
       ),
     },
-    // {
-    //   label: "Filler",
-    //   component: <></>,
-    // },
   ];
 
-  const handleNext = () => {
+  const handleNext = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (step < steps.length - 1) {
       setStep(step + 1);
     }
@@ -331,15 +329,19 @@ const TherapyForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await dispatch(createUserAsync({ userProfile: formData, username: auth0User?.sub }));
-      await updateUserProfile(auth0User?.sub);
-      console.log("Form submitted:", formData);
-    } catch (error) {
-      console.error(error);
+    if (step >= steps.length - 1) {
+      e.preventDefault();
+      try {
+        await dispatch(
+          createUserAsync({ userProfile: formData, username: auth0User?.sub })
+        );
+        await updateUserProfile(auth0User?.sub);
+        console.log("Form submitted:", formData);
+      } catch (error) {
+        console.error(error);
+      }
+      window.location.reload();
     }
-    window.location.reload();
   };
 
   return (

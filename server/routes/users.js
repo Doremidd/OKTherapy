@@ -4,8 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const User = require("../models/userModel");
 const Therapist = require("../models/therapistModel");
-const { convertUserCertifications } = require("../util/convertCertificates");
-const { convertUserApproaches } = require("../util/convertApproaches");
+const convertUserCertifications = require("../util/convertCertificates");
+const convertUserApproaches = require("../util/convertApproaches");
 
 
 // GET a specific user
