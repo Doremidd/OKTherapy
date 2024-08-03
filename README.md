@@ -48,6 +48,40 @@ As a therapist, I want to edit my profile information to ensure that it’s accu
 
 We would also like to expand outside of BC and provide counselling across Canada. ❌ (didn't find enough data) <br>
 
+
+### Tech used from Units 1-5 in the Project
+
+#### Unit 1: Team Formation, Project Ideas and HTML/CSS/JavaScript
+
+As a team, we brainstormed ideas about the project and decided on the technologies/API's/Library's we wanted to use in our project. After coming up with the idea of OkTheary, we sketched out some intial designs and flows of the web application. We came up with user stories for OkTherapy as well as some color palette's.
+
+#### Unit 2: React/Redux
+
+We used React and React-Redux to create a basic frontend and flows for switching between different pages. In particular, we used a component library called "Chakra UI" to build out our questionaire tailored for users.
+
+#### Unit 3: Node & Express
+
+We implemented a node backend for our server to communicate with our frontend using API calls.
+
+#### Unit 4: MongoDB Database
+
+We used MongoDB to store our collections database for persistent storage our data. Specifically we made two collections, one used for the therapists data that we scraped from the web and other used for user's data where we stored their therapy preferences that we collect from our questionaire.
+
+#### Unit 5: Release Engineering
+
+We deployed our application using Render. We also implemented GitHub actions and tests for a continuous integration/ continuous deployment pipeline. We also did some code cleanup and code quality checks before final release.
+
+### Above and Beyond
+
+- GEMINI (email template)
+
+- We also vastly improved our matching algorithm by introducing a ranking system. For each set of therapists that were returned by our matching algorithm we further gave them a score from 0 to 1. The score was based on factors like how many of the users preferred certifications a therapist has or how many of the users preferred therapy methods a therapist offered. Then we ranked each therapists on how many they offered and picked out therapists that most closely resemble a users needs. Furthermore, we added a location feature where using the cordinated of a users entered location, we would try to find therapist most closely related to them.
+
+
+### Next Steps
+
+To further improve our app, we would have liked to expand our service to more provinces other than BC. We would have also liked a way for therapists to have their own verified accounts that they could then update their profile with similar to how users can for their changing needs, as a therapists might change their methods or specilized fields.
+
 ### User flows/prototypes
 
 <img width="1351" alt="Screenshot 2024-05-23 at 11 40 55 PM" src="https://github.com/ubc-cpsc455-2024S/project-24_/assets/106799810/a54652d7-8c46-4bbb-90e4-e96997d13fb2">
