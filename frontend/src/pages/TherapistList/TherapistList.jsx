@@ -25,7 +25,7 @@ const TherapistList = () => {
   }, [dispatch, auth0User]);
 
   return (
-    <Container maxW="80%" className="mainContainer">
+    <Container maxW={["100%", null, "80%"]} className="mainContainer">
       <Text fontSize="3xl" fontWeight="500" className="alignLeft">
         YOUR MATCHES
       </Text>

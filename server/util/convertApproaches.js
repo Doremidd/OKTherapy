@@ -1,5 +1,5 @@
 // Pre-condition: userMethods is not empty
-export function convertUserAppraoches(scrapedMethods, userMethods) {
+function convertUserApproaches(scrapedMethods, userMethods) {
   // Boolean that represents if all the user's methods are covered by the therapist's methods
   const allCovered = userMethods.every((category) =>
     scrapedMethods.includes(category)
@@ -12,6 +12,8 @@ export function convertUserAppraoches(scrapedMethods, userMethods) {
 
   return { allCovered, matchedScore };
 }
+
+module.exports = convertUserApproaches;
 
 // Example:
 // const scrapedMethods = [

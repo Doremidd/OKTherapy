@@ -7,6 +7,8 @@ import {
   AccordionIcon,
   AccordionPanel,
   Button,
+  Box,
+  Flex,
 } from "@chakra-ui/react";
 import "./style.css";
 import { LinkIcon, PhoneIcon } from "@chakra-ui/icons";
@@ -14,10 +16,13 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { getTherapist } from "../../redux/therapistSlice";
+import { useMediaQuery } from "@chakra-ui/react";
 
 const MatchCard = ({ therapistId }) => {
+  const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
   const dispatch = useDispatch();
   const [therapist, setTherapist] = useState(null);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     const fetchTherapist = async () => {
@@ -59,7 +64,7 @@ const MatchCard = ({ therapistId }) => {
                 </Text>
                 <Text>
                   {therapist?.location || ""}
-                  {therapist?.onlineAvailability === "Yes" && " | Online ✔️"}
+                  {therapist?.onlineAvailability === "Yes" && " | Online ✔️ "}
                 </Text>
                 <Text>
                   {therapist?.fee
@@ -74,50 +79,85 @@ const MatchCard = ({ therapistId }) => {
         <AccordionPanel>
           <div className="accordionPanel">
             <Text className="accordionPanelText">
-              Description: {therapist?.description || "No description available"}
+              <strong>Description:</strong>{" "}
+              {showFullDescription
+                ? therapist?.description || "No description available"
+                : `${(therapist?.description || "No description available").slice(0, 100)}...`}
             </Text>
-            <Text className="accordionPanelText">
-              Specializes in: {therapist?.areaOfPractice?.join(", ") || ""}
-            </Text>
-            <Text className="accordionPanelText">
-              Approaches Used: {therapist?.approachesUsed?.join(", ") || ""}
-            </Text>
-            <br></br>
-            {therapist?.website && (
-              <Button
-                size="sm"
-                leftIcon={<LinkIcon />}
-                colorScheme="brand"
-                variant="outline"
-                className="leftButton"
-                onClick={() => window.open(therapist?.website, "_blank")}
-              >
-                Therapist&apos;s website
-              </Button>
+            {showFullDescription && (
+              <>
+                <Text className="accordionPanelText">
+                  <strong>Specializes in:</strong> {therapist?.areaOfPractice?.join(", ") || ""}
+                </Text>
+                <Text className="accordionPanelText">
+                  <strong>Approaches Used:</strong> {therapist?.approachesUsed?.join(", ") || ""}
+                </Text>
+              </>
             )}
-            {therapist?.phone && (
-              <Button
-                size="sm"
-                leftIcon={<PhoneIcon />}
-                colorScheme="brand"
-                variant="outline"
-                className="middleButton"
-              >
-                {therapist.phone}
-              </Button>
-            )}
-            {therapist?.contactFormUrl && (
-              <Button
-                size="sm"
-                leftIcon={<LinkIcon />}
-                colorScheme="brand"
-                variant="outline"
-                className="rightButton"
-                onClick={() => window.open(therapist.contactFormUrl, "_blank")}
-              >
-                Contact therapist
-              </Button>
-            )}
+            <br />
+            <Flex
+              justifyContent="space-between"
+              alignItems="center"
+              flexWrap="wrap"
+            >
+              <Box flex="1">
+                <Flex
+                  gap="8px"
+                  flexDirection={isLargerThan800 ? "row" : "column"}
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                >
+                  {therapist?.website && (
+                    <Button
+                      size="sm"
+                      leftIcon={<LinkIcon />}
+                      colorScheme="brand"
+                      variant="outline"
+                      className="leftButton"
+                      onClick={() => window.open(therapist?.website, "_blank")}
+                    >
+                      Therapist&apos;s website
+                    </Button>
+                  )}
+                  {therapist?.phone && (
+                    <Button
+                      size="sm"
+                      leftIcon={<PhoneIcon />}
+                      colorScheme="brand"
+                      variant="outline"
+                      className="middleButton"
+                      marginLeft="0px"
+                    >
+                      {therapist.phone}
+                    </Button>
+                  )}
+                  {therapist?.contactFormUrl && (
+                    <Button
+                      size="sm"
+                      leftIcon={<LinkIcon />}
+                      colorScheme="brand"
+                      variant="outline"
+                      className="rightButton"
+                      marginLeft="0px"
+                      onClick={() =>
+                        window.open(therapist.contactFormUrl, "_blank")
+                      }
+                    >
+                      Contact therapist
+                    </Button>
+                  )}
+                </Flex>
+              </Box>
+              <Box>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowFullDescription(!showFullDescription)}
+                >
+                  {showFullDescription ? "Less..." : "More..."}
+                </Button>
+              </Box>
+            </Flex>
           </div>
         </AccordionPanel>
       </AccordionItem>

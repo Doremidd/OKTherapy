@@ -105,10 +105,10 @@ Please return the result in between \`\`, with \${} surrounding only these 4 fie
   return prompt;
 }
 
-export const generateAITemplate = async (userProfile, user) => {
+export const generateAITemplate = async (userProfile, user, setIsLoading) => {
   const firstName = user.name.split(" ")[0];
   const prompt = createAIPrompt(userProfile);
-
+  setIsLoading(true);
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/generate`, {
       method: "POST",
@@ -127,6 +127,7 @@ export const generateAITemplate = async (userProfile, user) => {
       firstName,
       ...userProfile
     });
+    setIsLoading(false);
     return populatedContent;
 
   } catch (error) {
