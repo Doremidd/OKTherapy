@@ -80,26 +80,10 @@ describe('API test for users', () => {
     };
   
   User.prototype.save = jest.fn().mockResolvedValue(mockUser);
-  // console.log("Mock implementation of save method:", User.prototype.save.mock);
 
 	const response = await request(app).post('/users').send(mockUser.profile,mockUser.userName);
   
 	expect(response.status).toBe(201);
-	// expect(response.body).toEqual({
-  //   userName:mockUser.userName,
-  //   firstName: mockUser.firstName,
-  //   lastName: mockUser.lastName,
-  //   age: mockUser.age,
-  //   gender: mockUser.gender,
-  //   sexuality: mockUser.sexuality,
-  //   location: mockUser.location,
-  //   budget: mockUser.budget,
-  //   therapyMode: mockUser.therapyMode,
-  //   therapistGender: mockUser.therapistGender,
-  //   therapyFocus: mockUser.therapyFocus,
-  //   therapyMethods: mockUser.therapyMethods,
-  //   certification: mockUser.certification,
-  // });
 	
   });
 
@@ -131,15 +115,10 @@ describe('API test for users', () => {
 
     // First send a POST request to create the user
     const initialResponse = await request(app).post('/users').send(initialUser);
-
     expect(initialResponse.status).toBe(201);
-    // expect(initialResponse.body).toEqual(initialUser);
 
     // Then send a PUT request to update the user
     const updateResponse = await request(app).put(`/users/${initialUser.userName}`).send(updatedUser);
-
-    // expect(updateResponse.status).toBe(200);
-    // expect(updateResponse.body).toEqual(updatedUser);
   });
 
 
