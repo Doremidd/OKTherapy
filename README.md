@@ -14,35 +14,39 @@ OKTherapy is a personalized therapy-matching platform designed to connect users 
 ## Project task requirements
 
 ### Minimal requirements (will definitely complete)
-As a new user I can register an account for the website so I can use the functionalities of the website. &#x2611 <br>
+As a new user I can register an account for the website so I can use the functionalities of the website. ✅ <br>
 
-As a user I want to login to my account so that I can securely access my personal information. <br>
+As a user I want to login to my account so that I can securely access my personal information. ✅ <br>
 
 As a user I want to fill out my profile with personal information so that I can be well matched based on my needs:
-- Generate form questions based on common therapist specialties and areas of practice 
-- Create a front-end form
-- Create an API endpoint that creates a user profile and saves the data to the database
-- Create a database schema <br>
+- Generate form questions based on common therapist specialties and areas of practice  ✅
+- Create a front-end form ✅
+- Create an API endpoint that creates a user profile and saves the data to the database ✅
+- Create a database schema ✅ <br>
 
 As a user I want to be matched to therapists to narrow down my search:
-- Scrape therapist profiles from https://counsellingbc.com/counsellors
-- Create a script to populate the DB with scraped data
-- Create an API endpoint to retrieve therapist profiles
-- Create an algorithm to filter and rank therapists from the database according to user preferences
-- Create a front-end that displays the matched therapists
+- Scrape therapist profiles from https://counsellingbc.com/counsellors ✅
+- Create a script to populate the DB with scraped data ✅
+- Create an API endpoint to retrieve therapist profiles ✅
+- Create an algorithm to filter and rank therapists from the database according to user preferences ✅
+- Create a front-end that displays the matched therapists ✅
 
 
 ### Standard requirements (will most likely complete)
-As a user I want to be able to browse through therapists profiles that I’ve been matched with to find the one that best suits my needs. <br>
+As a user I want to be able to browse through therapists profiles that I’ve been matched with to find the one that best suits my needs. ✅ <br>
 
-As a user I want to edit my profile information after creation to reflect my changing needs. <br>
+As a user I want to edit my profile information after creation to reflect my changing needs. ✅ <br>
 
-As a user, I want to be able to see my matched therapists as long as I’m logged in (can be different sessions). <br>
+As a user, I want to be able to see my matched therapists as long as I’m logged in (can be different sessions). ✅ <br>
+
+As a user, I want to have a way to contact the therapists I have been matched with. ✅ <br>
 
 ### Stretch requirements (plan to complete at least 1)
-As a user I want to send an email to a therapist from the website so that I can easily communicate with the therapist.<br>
+As a first time user, I want some template conversation opener to reach out to the therapist with. ✅ <br>
 
-As a therapist, I want to edit my profile information to ensure that it’s accurate. <br>
+As a therapist, I want to edit my profile information to ensure that it’s accurate. ❌ <br>
+
+We would also like to expand outside of BC and provide counselling across Canada. ❌ (didn't find enough data) <br>
 
 ### User flows/prototypes
 
