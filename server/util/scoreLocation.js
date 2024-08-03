@@ -4,7 +4,7 @@ async function getCoordinates(city) {
   try {
     const response = await fetch(
       `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
-        city
+        city + ", BC"
       )}&key=${process.env.OPENCAGE_API}&limit=1`
     );
 

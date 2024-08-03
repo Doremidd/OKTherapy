@@ -33,6 +33,7 @@ import { updateUserProfile } from "../../util/updateUserProfile";
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const value = useSelector((state) => state.user.profile);
   const auth0User = useSelector((state) => state.user.auth0User);
 
@@ -74,11 +75,13 @@ const UserProfile = () => {
   };
 
   const handleSave = async () => {
-    setIsEditing(false);
+    setIsLoading(true);
     await dispatch(
       updateUserAsync({ userProfile: profileValues, userName: auth0User?.sub })
     );
     await updateUserProfile(auth0User?.sub);
+    setIsLoading(false);
+    setIsEditing(false);
   };
 
   const handleCheckboxChange = (category, item, checked) => {
@@ -451,7 +454,7 @@ const UserProfile = () => {
           </VStack>
         </Box>
       </div>
-      {isEditing && <Footer onCancel={handleCancel} onSave={handleSave} />}
+      {isEditing && <Footer onCancel={handleCancel} onSave={handleSave} isLoading={isLoading}/>}
     </>
   );
 };
