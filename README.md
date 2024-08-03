@@ -14,7 +14,7 @@ OKTherapy is a personalized therapy-matching platform designed to connect users 
 ## Project task requirements
 
 ### Minimal requirements (will definitely complete)
-As a new user I can register an account for the website so I can use the functionalities of the website. <br>
+As a new user I can register an account for the website so I can use the functionalities of the website. &#x2611 <br>
 
 As a user I want to login to my account so that I can securely access my personal information. <br>
 
