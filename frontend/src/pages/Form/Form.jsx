@@ -317,6 +317,17 @@ const TherapyForm = () => {
   const handleNext = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Add validation for first name and last name
+    if (step === 0 && !formData.firstName.trim()) {
+      alert("Please enter your first name.");
+      return;
+    }
+    if (step === 1 && !formData.lastName.trim()) {
+      alert("Please enter your last name.");
+      return;
+    }
+
     if (step < steps.length - 1) {
       setStep(step + 1);
     }
