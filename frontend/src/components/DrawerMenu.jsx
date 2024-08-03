@@ -48,7 +48,7 @@ const DrawerMenu = () => {
           <DrawerHeader>Menu</DrawerHeader>
 
           <DrawerBody>
-            <Button as={Link} to="/matches" w="100%" mb={2}>
+            <Button as={Link} to="/home" w="100%" mb={2}>
               Matches
             </Button>
             <Button as={Link} to="/email-generator" w="100%" mb={2}>

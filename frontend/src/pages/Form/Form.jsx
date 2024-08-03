@@ -347,7 +347,6 @@ const TherapyForm = () => {
           createUserAsync({ userProfile: formData, username: auth0User?.sub })
         );
         await updateUserProfile(auth0User?.sub);
-        console.log("Form submitted:", formData);
       } catch (error) {
         console.error(error);
       }

@@ -3,7 +3,7 @@ import { HStack } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
 
 // eslint-disable-next-line react/prop-types
-export default function Footer({ onCancel, onSave }) {
+export default function Footer({ onCancel, onSave, isLoading }) {
   return (
     <div>
       <Box display="flex" justifyContent={["center", null, "start"]} ml={[null, null, "20%"]} mb="50px" mt="50px">
@@ -11,7 +11,7 @@ export default function Footer({ onCancel, onSave }) {
           <Button colorScheme="teal" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button colorScheme="teal" onClick={onSave}>
+          <Button isLoading={isLoading} colorScheme="teal" onClick={onSave}>
             Save
           </Button>
         </HStack>

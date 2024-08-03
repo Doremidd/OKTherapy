@@ -33,6 +33,7 @@ import { updateUserProfile } from "../../util/updateUserProfile";
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const value = useSelector((state) => state.user.profile);
   const auth0User = useSelector((state) => state.user.auth0User);
 
@@ -45,7 +46,7 @@ const UserProfile = () => {
     gender: value?.gender || "",
     sexuality: value?.sexuality || "",
     location: value?.location || "",
-    therapistModes: value?.therapistModes || "",
+    therapyMode: value?.therapyMode || "",
     therapistGender: value?.therapistGender || "",
     therapyFocus: value?.therapyFocus || [],
     therapyMethods: value?.therapyMethods || [],
@@ -74,11 +75,13 @@ const UserProfile = () => {
   };
 
   const handleSave = async () => {
-    setIsEditing(false);
+    setIsLoading(true);
     await dispatch(
       updateUserAsync({ userProfile: profileValues, userName: auth0User?.sub })
     );
     await updateUserProfile(auth0User?.sub);
+    setIsLoading(false);
+    setIsEditing(false);
   };
 
   const handleCheckboxChange = (category, item, checked) => {
@@ -296,11 +299,11 @@ const UserProfile = () => {
               <HStack width={["100%", null, "40%"]}>
                 <Text>Therapy Mode</Text>
                 <Select
-                  value={profileValues?.therapistModes}
+                  value={profileValues?.therapyMode}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
-                      therapistModes: e.target.value,
+                      therapyMode: e.target.value,
                     })
                   }
                   disabled={!isEditing}
@@ -451,7 +454,7 @@ const UserProfile = () => {
           </VStack>
         </Box>
       </div>
-      {isEditing && <Footer onCancel={handleCancel} onSave={handleSave} />}
+      {isEditing && <Footer onCancel={handleCancel} onSave={handleSave} isLoading={isLoading}/>}
     </>
   );
 };
