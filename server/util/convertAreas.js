@@ -172,6 +172,8 @@ function convertUserCategories(scrapedAreas, userCategories) {
   return { allCovered, matchedScore };
 }
 
+module.exports = convertUserCategories;
+
 // Example:
 //   const scrapedAreas = [
 //     "Abuse - Emotional, Physical, Sexual",

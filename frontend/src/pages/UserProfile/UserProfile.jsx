@@ -45,7 +45,7 @@ const UserProfile = () => {
     gender: value?.gender || "",
     sexuality: value?.sexuality || "",
     location: value?.location || "",
-    therapistModes: value?.therapistModes || "",
+    therapyMode: value?.therapyMode || "",
     therapistGender: value?.therapistGender || "",
     therapyFocus: value?.therapyFocus || [],
     therapyMethods: value?.therapyMethods || [],
@@ -296,11 +296,11 @@ const UserProfile = () => {
               <HStack width={["100%", null, "40%"]}>
                 <Text>Therapy Mode</Text>
                 <Select
-                  value={profileValues?.therapistModes}
+                  value={profileValues?.therapyMode}
                   onChange={(e) =>
                     setProfileValues({
                       ...profileValues,
-                      therapistModes: e.target.value,
+                      therapyMode: e.target.value,
                     })
                   }
                   disabled={!isEditing}

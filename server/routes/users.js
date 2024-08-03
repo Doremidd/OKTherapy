@@ -6,7 +6,8 @@ const User = require("../models/userModel");
 const Therapist = require("../models/therapistModel");
 const convertUserCertifications = require("../util/convertCertificates");
 const convertUserApproaches = require("../util/convertApproaches");
-
+const convertAreas = require("../util/convertAreas");
+const scoreTherapists = require("../util/scoreLocation");
 
 // GET a specific user
 router.get("/:username", async function (req, res, next) {
@@ -31,7 +32,6 @@ router.get("/:username", async function (req, res, next) {
     },
     matchedTherapists: foundUser.matchedTherapists,
   };
-  console.log(userObject);
   return res.send(userObject);
 });
 
@@ -39,7 +39,6 @@ router.get("/:username", async function (req, res, next) {
 router.post("/", async function (req, res, next) {
   try {
     const user = new User(req.body);
-    console.log(user);
     await user.save();
     res.status(201).json(user);
   } catch (err) {
@@ -57,7 +56,6 @@ router.put("/:userName", async function (req, res, next) {
     );
     if (!updatedUser)
       return res.status(404).send({ message: "User not found" });
-    console.log(updatedUser);
     res.send(updatedUser);
   } catch (error) {
     next(error);
@@ -72,7 +70,7 @@ router.put("/:username/therapists", async function (req, res, next) {
   if (!foundUser) return res.status(404).send({ message: "User not found" });
 
   const matchingCriteria = {
-    fee: { $lte: foundUser.budget[1] },
+    fee: { $gte: foundUser.budget[0], $lte: foundUser.budget[1] },
     gender: foundUser.therapistGender,
   };
 
@@ -100,7 +98,7 @@ router.put("/:username/therapists", async function (req, res, next) {
 
   if (matchedTherapists.length === 0) {
     const bestRankCriteria = [
-      { fee: { $lte: foundUser.budget[1] } },
+      { fee: { $gte: foundUser.budget[0], $lte: foundUser.budget[1] } },
       { gender: foundUser.therapistGender },
       {
         onlineAvailability:
@@ -108,7 +106,7 @@ router.put("/:username/therapists", async function (req, res, next) {
       },
       {
         inPersonAvailability:
-          foundUser.therapyMode === "InPerson" ? "Yes" : undefined,
+          foundUser.therapyMode === "In-Person" ? "Yes" : undefined,
       },
     ];
 
@@ -121,39 +119,76 @@ router.put("/:username/therapists", async function (req, res, next) {
         matchedTherapists = matchedTherapists.concat(secondaryMatches);
       }
     }
-
-    // to remove duplicate therapists
-    //const uniqueTherapists = [];
-    //const therapistNames = new Set();
-    //for (const therapist of matchedTherapists) {
-    //  if (!therapistNames.has(therapist.name)) {
-    //    uniqueTherapists.push(therapist);
-    //    therapistNames.add(therapist.name);
-    //  }
-    //}
-    //matchedTherapists = uniqueTherapists;
   }
+  // to remove duplicate therapists
+  const uniqueTherapists = [];
+  const therapistNames = new Set();
+  for (const therapist of matchedTherapists) {
+    if (!therapistNames.has(therapist.name)) {
+      uniqueTherapists.push(therapist);
+      therapistNames.add(therapist.name);
+    }
+  }
+  matchedTherapists = uniqueTherapists;
 
   // get each matchedScore
   const userCertifications = foundUser.certification || [];
   const userMethods = foundUser.therapyMethods || [];
+  const userFocuses = foundUser.therapyFocus || [];
   matchedTherapists = matchedTherapists.map((therapist) => {
     const scrapedCertifications = therapist.certification || [];
     const scrapedMethods = therapist.approachesUsed || [];
-    const { matchedScore: certScore } = convertUserCertifications(
-      scrapedCertifications,
-      userCertifications
-    );
-    const { matchedScore: methodScore } = convertUserApproaches(
-      scrapedMethods,
-      userMethods
-    );
-    const totalScore = (certScore + methodScore) / 2;
+    const scrapedFocuses = therapist.areaOfPractice || [];
+
+    let certScore = 0;
+    let methodScore = 0;
+    let focusScore = 0;
+    let scoreCount = 0;
+
+    if (userCertifications.length > 0) {
+      const { matchedScore: calculatedCertScore } = convertUserCertifications(
+        scrapedCertifications,
+        userCertifications
+      );
+      certScore = calculatedCertScore;
+      scoreCount++;
+    }
+
+    if (userMethods.length > 0) {
+      const { matchedScore: calculatedMethodScore } = convertUserApproaches(
+        scrapedMethods,
+        userMethods
+      );
+      methodScore = calculatedMethodScore;
+      scoreCount++;
+    }
+
+    if (userFocuses.length > 0) {
+      const { matchedScore: calculateFocusScore } = convertAreas(
+        scrapedFocuses,
+        userFocuses
+      );
+      focusScore = calculateFocusScore;
+      scoreCount++;
+    }
+
+    const totalScore =
+      scoreCount > 0 ? (certScore + methodScore + focusScore) / scoreCount : 0;
     return { ...therapist.toObject(), totalScore };
   });
 
   // Sort therapists by matchedScore
-  matchedTherapists.sort((a, b) => b.matchedScore - a.matchedScore);
+  matchedTherapists.sort((a, b) => b.totalScore - a.totalScore);
+
+  // get top 10
+  matchedTherapists = matchedTherapists.slice(0, 10);
+
+  // score based on location
+  const userLocation = foundUser.location;
+  if (userLocation && foundUser.therapyMode === "In-Person") {
+    matchedTherapists = await scoreTherapists(matchedTherapists, userLocation);
+    matchedTherapists.sort((a, b) => b.totalScore - a.totalScore);
+  }
 
   // get top 5
   matchedTherapists = matchedTherapists.slice(0, 5);
