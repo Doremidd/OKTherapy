@@ -11,8 +11,10 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useLocation } from "react-router-dom";
 
 const DrawerMenu = () => {
+  let location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
   const { logout } = useAuth0();
@@ -35,34 +37,41 @@ const DrawerMenu = () => {
           style={{ height: 20, cursor: "pointer" }}
         />
       </Button>
-      <Drawer
-        isOpen={isOpen}
-        colorScheme="brand"
-        placement="left"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Menu</DrawerHeader>
+      {location.pathname != "/" && (
+        <Drawer
+          isOpen={isOpen}
+          colorScheme="brand"
+          placement="left"
+          onClose={onClose}
+          finalFocusRef={btnRef}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Menu</DrawerHeader>
 
-          <DrawerBody>
-            <Button as={Link} to="/home" w="100%" mb={2}>
-              Matches
-            </Button>
-            <Button as={Link} to="/email-generator" w="100%" mb={2}>
-              Email Templates
-            </Button>
-            <Button as={Link} to="/profile" w="100%" mb={2}>
-              Profile
-            </Button>
-            <Button variant="outline" w="100%" colorScheme="brand" onClick={() => logout()}>
-              Log out
-            </Button>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+            <DrawerBody>
+              <Button as={Link} to="/home" w="100%" mb={2}>
+                Matches
+              </Button>
+              <Button as={Link} to="/email-generator" w="100%" mb={2}>
+                Email Templates
+              </Button>
+              <Button as={Link} to="/profile" w="100%" mb={2}>
+                Profile
+              </Button>
+              <Button
+                variant="outline"
+                w="100%"
+                colorScheme="brand"
+                onClick={() => logout()}
+              >
+                Log out
+              </Button>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      )}
     </>
   );
 };
