@@ -75,7 +75,7 @@ We deployed our application using Render. We also implemented GitHub actions and
 
 - GEMINI (email template)
 
-- We also vastly improved our matching algorithm by introducing a ranking system. For each set of therapists that were returned by our matching algorithm we further gave them a score from 0 to 1. The score was based on factors like how many of the users preferred certifications a therapist has or how many of the users preferred therapy methods a therapist offered. Then we ranked each therapists on how many they offered and picked out therapists that most closely resemble a users needs. Furthermore, we added a location feature where using the cordinated of a users entered location, we would try to find therapist most closely related to them.
+- We also vastly improved our matching algorithm by introducing a ranking system. For each set of therapists that were returned by our matching algorithm we further gave them a score from 0 to 1. The score was based on factors like how many of the users preferred certifications a therapist has or how many of the users preferred therapy methods a therapist offered. Then we ranked each therapists on how many they offered and picked out therapists that most closely resemble a users needs. Furthermore, we added a location feature where using the coordinates of a users entered location, we would try to find therapist most closely related to them.
 
 
 ### Next Steps
