@@ -56,8 +56,9 @@ function formatList(areas) {
   } else if (areas.length === 2) {
     return areas.map((area) => area.toLowerCase()).join(" and ");
   } else {
-    const lastArea = areas.pop();
-    return `${areas
+    const areasCopy = [...areas];
+    const lastArea = areasCopy.pop();
+    return `${areasCopy
       .map((area) => area.toLowerCase())
       .join(", ")} and ${lastArea.toLowerCase()}`;
   }
