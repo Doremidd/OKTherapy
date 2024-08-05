@@ -82,6 +82,17 @@ We deployed our application using Render. We also implemented GitHub actions and
 
 To further improve our app, we would have liked to expand our service to more provinces other than BC. We would have also liked a way for therapists to have their own verified accounts that they could then update their profile with similar to how users can for their changing needs, as a therapists might change their methods or specilized fields.
 
+### List of contributions
+
+- Julia:
+
+- Isabella: website design, matches page frontend, redux setup, database connection setup, email generation page
+
+- Selina: frontend ui + redux + api for profile page, tests for users and therapists api, deployment of website&github actions
+
+- Aviral: At the start of the project, I did the initial design and implementation of the user questionnaire/form. I was also responsible for setting up the Auth0 login feature. Towards the peak to end of the project, I worked on coming up with the matching algorithm and improving it for our “above and beyond” target.
+
+
 ### User flows/prototypes
 
 <img width="1351" alt="Screenshot 2024-05-23 at 11 40 55 PM" src="https://github.com/ubc-cpsc455-2024S/project-24_/assets/106799810/a54652d7-8c46-4bbb-90e4-e96997d13fb2">
