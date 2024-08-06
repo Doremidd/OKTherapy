@@ -126,11 +126,10 @@ export const generateAITemplate = async (userProfile, user, setIsLoading) => {
     const template = data?.candidates[0].content.parts[0].text;
     let populatedContent = populateTemplate(template, {
       firstName,
-      ...userProfile
+      ...userProfile,
     });
     setIsLoading(false);
     return populatedContent;
-
   } catch (error) {
     console.error("Error generating content:", error);
   }

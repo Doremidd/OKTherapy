@@ -26,7 +26,6 @@ const getUser = async (userName) => {
   return response.json();
 };
 
-//updateUser function
 const updateUser = async (userProfile,userName) => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${userName}`, {
     method: "PUT",

@@ -9,7 +9,7 @@ async function getCoordinates(city) {
     );
 
     if (!response.ok) {
-      throw new Error("Response was not ok");
+      throw new Error("Geolocation API response was not ok");
     }
 
     const data = await response.json();
@@ -65,7 +65,7 @@ async function scoreTherapists(therapists, referenceCity) {
         therapistCoords.lng
       );
 
-      // Max distance is 100 km, returns a score of 0
+      // if distance is over 100km, score is 0
       const score = Math.max(0, 1 - distance / 100);
       return {
         ...therapist,

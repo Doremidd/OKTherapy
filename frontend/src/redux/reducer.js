@@ -56,7 +56,7 @@ export const userSlice = createSlice(
           state.createUser = REQUEST_STATE.REJECTED;
           state.error = action.error;
         })
-        // update user cases
+        // update user / PUT
         .addCase(updateUserAsync.pending, (state) => {
           state.updateUser = REQUEST_STATE.PENDING;
           state.error = null;

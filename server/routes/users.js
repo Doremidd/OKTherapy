@@ -58,7 +58,7 @@ router.put("/:userName", async function (req, res, next) {
   }
 });
 
-// PUT: Assign therapists to a user's assigned therapist db field
+// PUT: Assign therapists to a user's matchedTherapists db field
 router.put("/:username/therapists", async function (req, res, next) {
   const userName = decodeURIComponent(req.params.username);
   const foundUser = await User.findOne({ userName: userName });

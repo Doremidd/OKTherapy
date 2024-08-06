@@ -11,7 +11,6 @@ router.get("/:id", async function (req, res, next) {
   try {
     const therapist = await Therapist.findById(therapistId);
     if (!therapist) {
-      console.log("Therapist not found with ID:", therapistId);  // Debugging log
       return res.status(404).send({ message: "Therapist not found" });
     }
     res.json(therapist);
@@ -30,10 +29,5 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
-router.put("/", function (req, res, next) {
-  // Stretch requirement: update a therapist
-});
-
 
 module.exports = router;
