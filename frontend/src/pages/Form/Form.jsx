@@ -12,6 +12,7 @@ import {
   Progress,
   CheckboxGroup,
   Checkbox,
+  Text,
 } from "@chakra-ui/react";
 import BudgetSlider from "../../components/BudgetSlider";
 import {
@@ -46,6 +47,7 @@ const TherapyForm = () => {
     therapyMethods: [],
     certification: [],
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const isOtherGender =
     !genders.includes(formData.gender) && formData.gender !== "";
@@ -60,7 +62,9 @@ const TherapyForm = () => {
           <Input
             type="text"
             value={formData.firstName}
-            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, firstName: e.target.value })
+            }
             placeholder="Your First Name"
           />
         </FormControl>
@@ -74,7 +78,9 @@ const TherapyForm = () => {
           <Input
             type="text"
             value={formData.lastName}
-            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, lastName: e.target.value })
+            }
             placeholder="Your Last Name"
           />
         </FormControl>
@@ -208,7 +214,9 @@ const TherapyForm = () => {
       label: "Therapy focus",
       component: (
         <FormControl id="therapyFocus" isRequired>
-          <FormLabel>What are the main issues you want to address in therapy?</FormLabel>
+          <FormLabel>
+            What are the main issues you want to address in therapy?
+          </FormLabel>
           <CheckboxGroup
             value={formData.therapyFocus}
             onChange={(values) =>
@@ -235,9 +243,7 @@ const TherapyForm = () => {
       label: "Preferred Therapy Methods",
       component: (
         <FormControl id="therapyMethods" isRequired>
-          <FormLabel>
-          What type of therapy are you interested in?
-          </FormLabel>
+          <FormLabel>What type of therapy are you interested in?</FormLabel>
           <CheckboxGroup
             value={formData.therapyMethods}
             onChange={(values) =>
@@ -265,10 +271,10 @@ const TherapyForm = () => {
       component: (
         <FormControl id="therapistGender" isRequired>
           <FormLabel>
-          Do you have a preference for the therapist&apos;s gender?
+            Do you have a preference for the therapist&apos;s gender?
           </FormLabel>
           <Select
-            placeholder="Do you have a preference for the therapist&apos;s gender?"
+            placeholder="Do you have a preference for the therapist's gender?"
             value={formData.therapistGender}
             onChange={(e) =>
               setFormData({ ...formData, therapistGender: e.target.value })
@@ -342,6 +348,7 @@ const TherapyForm = () => {
   const handleSubmit = async (e) => {
     if (step >= steps.length - 1) {
       e.preventDefault();
+      setIsLoading(true);
       try {
         await dispatch(
           createUserAsync({ userProfile: formData, username: auth0User?.sub })
@@ -349,6 +356,8 @@ const TherapyForm = () => {
         await updateUserProfile(auth0User?.sub);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
       window.location.reload();
     }
@@ -357,13 +366,15 @@ const TherapyForm = () => {
   return (
     <div
       style={{
-        minHeight: "80vh",
+        minHeight: "74vh",
+        marginTop: "5%",
+        padding: "12px"
       }}
     >
+      <Text fontSize='xl' fontWeight="500" marginBottom="36px">Create your profile to find your perfect therapist match</Text>
       <Box
         maxW="md"
         mx="auto"
-        mt={6}
         p={5}
         borderWidth={1}
         borderRadius="lg"
@@ -387,7 +398,7 @@ const TherapyForm = () => {
                 Next
               </Button>
             ) : (
-              <Button colorScheme="teal" type="submit">
+              <Button isLoading={isLoading} colorScheme="teal" type="submit">
                 Submit
               </Button>
             )}
