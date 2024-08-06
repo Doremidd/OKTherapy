@@ -357,13 +357,13 @@ const TherapyForm = () => {
   return (
     <div
       style={{
-        minHeight: "70vh",
+        minHeight: "80vh",
       }}
     >
       <Box
         maxW="md"
         mx="auto"
-        mt={10}
+        mt={6}
         p={5}
         borderWidth={1}
         borderRadius="lg"
