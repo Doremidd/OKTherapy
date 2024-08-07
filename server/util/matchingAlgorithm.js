@@ -34,8 +34,8 @@ async function findTherapistMatches(foundUser) {
   );
   // Sort therapists by matchedScore
   matchedTherapists.sort((a, b) => b.totalScore - a.totalScore);
-  // Score top 10 based on location
-  matchedTherapists = matchedTherapists.slice(0, 10);
+  // Score top 50 based on location
+  matchedTherapists = matchedTherapists.slice(0, 50);
   const userLocation = foundUser.location;
   if (userLocation && foundUser.therapyMode === "In-Person") {
     matchedTherapists = await scoreTherapists(matchedTherapists, userLocation);
