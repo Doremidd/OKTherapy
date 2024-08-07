@@ -87,7 +87,7 @@ To further improve our app, we would have liked to expand our service to more pr
 
 - Isabella: I designed the website UI and implemented the matches page frontend. I also set up the redux and the database connection, as well as worked on the email generation page and added geolocation to the matching algorithm. 
 
-- Selina: frontend ui + redux + api for profile page, tests for users and therapists api, deployment of website&github actions
+- Selina: I'm responsible for the implementation of Profile page, which includes frontend ui design, redux for state management,API design and data storage by MongoDB. I also write tests for users and therapists api and deploy our website on Render.
 
 - Aviral: At the start of the project, I did the initial design and implementation of the user questionnaire/form. I was also responsible for setting up the Auth0 login feature. Towards the peak to end of the project, I worked on coming up with the matching algorithm and improving it for our “above and beyond” target.
 
