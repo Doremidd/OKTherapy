@@ -90,7 +90,7 @@ To further improve our app, we would like to address our stretch requirements:
 
 ### List of contributions
 
-- Julia:
+- Julia: I played a key role in creating the therapist profile functionality in Redux and testing with dummy data. I developed a web scraper to automate the creation of therapist profiles from the BC Counseling website then saved those in the database. I set up the server and established the connection to the database, created therapist API endpoints, and was responsible for the matches page.
 
 - Isabella: I designed the website UI and implemented the matches page frontend. I also set up the redux and the database connection, as well as worked on the email generation page and added geolocation to the matching algorithm. 
 
